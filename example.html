@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Docson Example</title>
+    <link rel="stylesheet" href="css/docson.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/docson.js"></script>
+</head>
+<body>
+    <div class="docson">
+        <div class="type-container">
+            <div class="type-header">
+                <div class="type-name title">Invoice</div>
+                <div class="type-description">Represents a customer order with all information needed for the packaging, delivery and payment</div>
+                <div class="expand button" title="Expand all">+</div>
+                <div class="type-header-end"></div>
+            </div>
+            <div class="type-body">
+                <div class="property">
+                    <div class="property-header">
+                        <div class="property-name">no</div>
+                        <div class="property-type">
+                            <span class="property-type-integer">integer</span>
+                        </div>
+                        <div class="property-description">Identifies the invoice<br>blabla<br>blublu</div>
+                    </div>
+                </div>
+                <div class="property">
+                    <div class="property-header">
+                        <div class="property-name">no</div>
+                        <div class="property-type">
+                            <span class="property-type-integer">integer</span>
+                        </div>
+                        <div class="property-description">Identifies the invoice with a very long line of text that will break if I put even more text inside it</div>
+                    </div>
+                </div>
+                <div class="property">
+                    <div class="property-header">
+                        <div class="property-name">no</div>
+                        <div class="property-type">
+                            <span class="property-type-integer">integer</span>
+                        </div>
+                        <div class="property-description">Identifies the invoice</div>
+                    </div>
+                </div>
+                <div class="property">
+                    <div class="property-header">
+                        <div class="property-name">customer</div>
+                        <div class="property-type">
+                            <span class="property-type-ref property-type-expandable button">Customer</span>
+                        </div>
+                        <div class="property-description">Who is going to pay</div>
+                    </div>
+                    <div class="property-type-container">
+                        <div class="type-container">
+                            <div class="type-header">
+                                <div class="type-description">A person or company</div>
+                                <div class="type-header-end"></div>
+                            </div>
+                            <div class="type-body">
+                                <div class="property">
+                                    <div class="property-header">
+                                        <div class="property-name">id</div>
+                                        <div class="property-type">
+                                            <span class="property-type-string">string</span>
+                                        </div>
+                                        <div class="property-description">Identifies the customer</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="property">
+                    <div class="property-header">
+                        <div class="property-name">lines</div>
+                        <div class="property-type">
+                            <span class="property-collection">array</span>
+                            <span class="property-type-ref property-type-expandable button">InvoiceLine</span>
+                        </div>
+                        <div class="property-description">The invoice content</div>
+                    </div>
+                </div>
+                <div class="property">
+                    <div class="property-header">
+                        <div class="property-name">properties</div>
+                        <div class="property-type">
+                            <span class="property-collection">array</span>
+                            <span class="property-type-object property-type-expandable button">object</span>
+                        </div>
+                        <div class="property-description">Some additional info</div>
+                    </div>
+                    <div class="property-type-container">
+                        <div class="type-container">
+                            <div class="type-body">
+                                <div class="property">
+                                    <div class="property-header">
+                                        <div class="property-name">key</div>
+                                        <div class="property-type">
+                                            <span class="property-type-string">string</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="property">
+                                    <div class="property-header">
+                                        <div class="property-name">value</div>
+                                        <div class="property-type">
+                                            <span class="property-type-string">string</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+/*
+ * Copyright 2013 Laurent Bovet <laurent.bovet@windmaster.ch>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.docson {
+    font-family: verdana,helvetica;
+    font-size: 14px;
+    padding: 6px 6px 6px 6px;
+}
+
+.type-container {
+    float: left;
+    background: white;
+    border: 1px solid gainsboro;
+    border-radius: 4px;
+    padding-bottom: 10px;
+}
+
+.expand {
+    width: 18px;
+    text-align: center;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    font-size: 120%;
+    color: grey;
+}
+
+.type-header {
+    padding: 6px;
+    background: gainsboro;
+}
+
+.type-name {
+    padding: 2px 40px 2px 2px;
+    font-weight: bold;
+    float: left;
+}
+
+.title {
+    margin-top: -3px;
+    font-size: 120%;
+}
+
+.type-description {
+    color: grey;
+    float: left;
+    max-width: 600px;
+}
+
+.type-header-end {
+    clear: both;
+}
+
+.type-body {
+    padding-left: 10px;
+    padding-right: 14px;
+    clear: both;
+}
+
+.property {
+    padding-top: 12px;
+    clear: both;
+}
+
+.property-header {
+    padding-top: 3px;
+    height: 20px;
+}
+
+.property-name {
+    font-weight: bold;
+    float: left;
+    min-width: 130px;
+}
+
+.property-collection {
+    font-size: 80%;
+    color: grey;
+}
+
+.property-type {
+    padding-left: 6px;
+    float: left;
+    min-width: 160px;
+}
+
+.property-type-string {
+    color: green;
+}
+
+.property-type-number {
+    color: blue;
+}
+
+.property-type-integer {
+    color: blueviolet;
+}
+
+.property-type-boolean {
+    color: orangered;
+}
+
+.property-type-object {
+    cursor: pointer;
+    z-index: -1;
+    padding: 4px;
+    border: 1px solid gainsboro;
+    border-radius: 4px;
+}
+
+.property-type-ref {
+    cursor: pointer;
+    padding: 4px;
+    background: gainsboro;
+    border-radius: 4px;
+}
+
+.property-type-expanded {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding-bottom: 6px;
+    border-bottom: none;
+}
+
+.property-description {
+    padding-left: 6px;
+    padding-bottom: 3px;
+    color: grey;
+    float: left;
+    max-width: 600px;
+}
+
+.property-type-container {
+    padding-top: 3px;
+    padding-left: 8px;
+    display: none;
+}
+
+.button {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
