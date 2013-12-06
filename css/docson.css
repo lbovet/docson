@@ -23,12 +23,13 @@
 .type-container {
     float: left;
     background: white;
-    border: 1px solid gainsboro;
+    border: 1px solid lightgrey;
     border-radius: 4px;
     padding-bottom: 10px;
 }
 
 .expand {
+    margin-right: -10px;
     width: 18px;
     text-align: center;
     cursor: pointer;
@@ -41,6 +42,7 @@
 .type-header {
     padding: 6px;
     background: gainsboro;
+    border-bottom: lightgrey;
 }
 
 .type-name {
@@ -55,7 +57,7 @@
 }
 
 .type-description {
-    color: grey;
+    color: dimgray;
     float: left;
     max-width: 600px;
 }
@@ -72,7 +74,7 @@
 
 .property {
     padding-top: 12px;
-    clear: both;
+    clear: left;
 }
 
 .property-header {
@@ -88,7 +90,7 @@
 
 .property-collection {
     font-size: 80%;
-    color: grey;
+    color: dimgray;
 }
 
 .property-type {
@@ -117,7 +119,7 @@
     cursor: pointer;
     z-index: -1;
     padding: 4px;
-    border: 1px solid gainsboro;
+    border: 1px solid lightgrey;
     border-radius: 4px;
 }
 
@@ -125,6 +127,7 @@
     cursor: pointer;
     padding: 4px;
     background: gainsboro;
+    border: 1px solid lightgrey;
     border-radius: 4px;
 }
 
@@ -138,7 +141,7 @@
 .property-description {
     padding-left: 6px;
     padding-bottom: 3px;
-    color: grey;
+    color: dimgray;
     float: left;
     max-width: 600px;
 }

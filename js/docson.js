@@ -14,13 +14,50 @@
  * limitations under the License.
  */
 
+// Docson 0.1
+
+var docson = docson || {};
+
 $(function() {
-    $(".property-type-expandable").click(function() {
-        $(this).toggleClass("property-type-expanded");
-        $(this).parent().parent().parent().children(".property-type-container").toggle();
+
+    var ready = $.Deferred();
+    var template;
+
+    Handlebars.registerHelper('primitive', function(type, options) {
+        if(typeof type != "object" && type != "array") {
+            return options.fn(this);
+        }
     });
-    $(".expand").click(function() {
-        $(this).parent().parent().find(".property-type-expandable").addClass("property-type-expanded");
-        $(this).parent().parent().find(".property-type-container").show();
-    })
+
+    $.get("template.html").done(function(source) {
+        template = Handlebars.compile(source);
+        ready.resolve();
+    });
+
+    docson.doc = function(element, schema) {
+        ready.done(function() {
+            if(typeof element == "string") {
+                element = $("#"+element);
+            }
+            element.addClass("docson").html(template(schema));
+
+            element.find(".property-type-expandable").click(function() {
+                $(this).toggleClass("property-type-expanded");
+                $(this).parent().parent().parent().children(".property-type-container").toggle(300);
+            });
+            element.find(".expand").click(function() {
+                if(this.expanded) {
+                    $(this).html(" + ").attr("title", "Expand all");
+                    $(this).parent().parent().find(".property-type-expandable").removeClass("property-type-expanded");
+                    $(this).parent().parent().find(".property-type-container").hide(300);
+                    this.expanded=false;
+                } else {
+                    $(this).html(" - ").attr("title", "Collapse all");
+                    $(this).parent().parent().find(".property-type-expandable").addClass("property-type-expanded");
+                    $(this).parent().parent().find(".property-type-container").show(300);
+                    this.expanded=true;
+                }
+            })
+        })
+    }
 });
