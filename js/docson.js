@@ -22,11 +22,18 @@ $(function() {
 
     var ready = $.Deferred();
     var template;
+    var source;
 
-    var stack = [{}];
+    var stack = [];
     
-    Handlebars.registerHelper('scope', function(id, object) {
-        
+    Handlebars.registerHelper('scope', function(schema, options) {
+        if(schema && (schema.id || schema.root)) {
+            stack.push( schema );
+            return options.fn(this);
+            stack.pop();
+        } else {
+            return options.fn(this);
+        }
     });
 
     Handlebars.registerHelper('equals', function(lvalue, rvalue, options) {
@@ -45,7 +52,15 @@ $(function() {
         }
     });
 
-    var resolveRef = function(ref) {
+    var resolveIdRef = function(ref) {
+        if(stack) {
+            for(i=stack.length-1; i>=0; i--) {
+                if(stack[i][ref]) {
+                    return stack[i][ref];
+                }
+            }
+        }
+        return null;
     }
 
     Handlebars.registerHelper('refName', function(ref) {
@@ -53,10 +68,12 @@ $(function() {
     });
 
     Handlebars.registerHelper('ref', function(ref) {
-        
+        var template = Handlebars.compile(source);
+        return new Handlebars.SafeString(template(resolveIdRef(ref)));
     });
 
-    $.get("template.html").done(function(source) {
+    $.get("template.html").done(function(content) {
+        source = content
         template = Handlebars.compile(source);
         ready.resolve();
     });
@@ -66,6 +83,7 @@ $(function() {
             if(typeof element == "string") {
                 element = $("#"+element);
             }
+            schema.root = true;
             element.addClass("docson").html(template(schema));
 
             element.find(".property-type-expandable").click(function() {

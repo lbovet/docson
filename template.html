@@ -1,11 +1,10 @@
+{{#scope this}}
 <div class="type-container">
-    {{#if true}}
     <div class="type-header">
-        {{#if id}}<div class="type-name title">{{id}}</div>{{/if}}
+        {{#if id}}<div class="type-name {{#if root}}title{{/if}}">{{id}}</div>{{/if}}
         <div class="type-description">{{title}} {{description}}</div>
         <div class="type-header-end"></div>
-    </div>
-    {{/if}}
+    </div
     <div class="type-body">
         <div class="expand button" title="Expand all">+</div>
         {{#if properties}}
@@ -39,13 +38,18 @@
                 <div class="property-description">{{property.title}} {{property.description}}</div>
             </div>
             {{#if $ref}}
-            {{ref $ref}}
-            {{/if}}
+            <div class="property-type-container">
+                {{ref $ref}}
+            </div>
+            {{/if}}            
             {{#if items.$ref}}
-            {{ref items.$ref}}
+            <div class="property-type-container">            
+                {{ref items.$ref}}
+            </div>
             {{/if}}
         </div>
         {{/each}}
         {{/if}}
     </div>
 </div>
+{{/scope}}
