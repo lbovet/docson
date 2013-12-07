@@ -23,10 +23,37 @@ $(function() {
     var ready = $.Deferred();
     var template;
 
+    var stack = [{}];
+    
+    Handlebars.registerHelper('scope', function(id, object) {
+        
+    });
+
+    Handlebars.registerHelper('equals', function(lvalue, rvalue, options) {
+        if (arguments.length < 3)
+            throw new Error("Handlebars Helper equals needs 2 parameters");
+        if( lvalue!=rvalue ) {
+            return options.inverse(this);
+        } else {
+            return options.fn(this);
+        }
+    });
+
     Handlebars.registerHelper('primitive', function(type, options) {
         if(typeof type != "object" && type != "array") {
             return options.fn(this);
         }
+    });
+
+    var resolveRef = function(ref) {
+    }
+
+    Handlebars.registerHelper('refName', function(ref) {
+        return ref;
+    });
+
+    Handlebars.registerHelper('ref', function(ref) {
+        
     });
 
     $.get("template.html").done(function(source) {
@@ -47,7 +74,7 @@ $(function() {
             });
             element.find(".expand").click(function() {
                 if(this.expanded) {
-                    $(this).html(" + ").attr("title", "Expand all");
+                    $(this).html(" + ").attr("title", "Expand all");                
                     $(this).parent().parent().find(".property-type-expandable").removeClass("property-type-expanded");
                     $(this).parent().parent().find(".property-type-container").hide(300);
                     this.expanded=false;

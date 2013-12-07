@@ -25,6 +25,7 @@
     background: white;
     border: 1px solid lightgrey;
     border-radius: 4px;
+    -moz-border-radius: 4px;
     padding-bottom: 10px;
 }
 
@@ -121,6 +122,8 @@
     padding: 4px;
     border: 1px solid lightgrey;
     border-radius: 4px;
+    -moz-border-radius: 4px;
+
 }
 
 .property-type-ref {
@@ -129,11 +132,14 @@
     background: gainsboro;
     border: 1px solid lightgrey;
     border-radius: 4px;
+    -moz-border-radius: 4px;
 }
 
 .property-type-expanded {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
+    -moz-border-bottom-left-radius: 0px;
+    -moz-border-bottom-right-radius: 0px;
     padding-bottom: 6px;
     border-bottom: none;
 }

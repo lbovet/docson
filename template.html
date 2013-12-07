@@ -14,21 +14,35 @@
             <div class="property-header">
                 <div class="property-name">{{@key}}</div>
                 <div class="property-type">
-                    {{#if false}}
-                    <span class="property-collection">array</span>
-                    {{/if}}
+                    {{#equals type "array"}}
+                        <span class="property-collection">array</span>
+                        {{#primitive items}}
+                        <span class="property-type-{{type}}">{{type}}</span>
+                        {{/primitive}}
+                        {{#equals items "object"}}
+                        <span class="property-type-object property-type-expandable button">object</span>
+                        {{/equals}}
+                        {{#if items.$ref}}
+                        <span class="property-type-ref property-type-expandable button">{{refName items.$ref}}</span>
+                        {{/if}}                    
+                    {{/equals}}
                     {{#primitive type}}
-                    <span class="property-type-{{type}}">{{type}}</span>
+                        <span class="property-type-{{type}}">{{type}}</span>
                     {{/primitive}}
-                    <span class="property-type-object property-type-expandable button">object</span>
+                    {{#equals type "object"}}
+                        <span class="property-type-object property-type-expandable button">object</span>
+                    {{/equals}}
                     {{#if $ref}}
-                    <span class="property-type-ref property-type-expandable button">{{! #refName $ref}}</span>
+                        <span class="property-type-ref property-type-expandable button">{{refName $ref}}</span>
                     {{/if}}
                 </div>
                 <div class="property-description">{{property.title}} {{property.description}}</div>
             </div>
             {{#if $ref}}
-            {{! #ref $ref}}
+            {{ref $ref}}
+            {{/if}}
+            {{#if items.$ref}}
+            {{ref items.$ref}}
             {{/if}}
         </div>
         {{/each}}
