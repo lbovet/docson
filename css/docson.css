@@ -43,6 +43,20 @@
     color: lightgrey;
 }
 
+.source-button {
+    float: right;
+    right: 2px;
+    width: 18px;
+    text-align: center;
+    margin-left: 3px;
+    margin-right: -2px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 70%;
+    color: darkgray;
+}
+
 .type-header {
     padding: 6px;
     background: gainsboro;
@@ -172,6 +186,60 @@
     user-select: none;
 }
 
+.button:hover {
+    color: darkred;
+}
+
 .desc > p {
     margin: 0;
 }
+
+.source {
+    display: none;
+    padding-left: 16px;
+    padding-right: 30px;
+}
+
+.json, .json-schema {
+    font-family: monospace;
+}
+
+.json-punctuation {
+    font-weight: bold;
+}
+
+.json-null, .json-true, .json-false {
+    font-weight: bold;
+}
+
+.json-true {
+    color: #080;
+}
+
+.json-false {
+    color: #800;
+}
+
+.json-object-key {
+    color: #246;
+}
+
+.json-keyword {
+    font-weight: bold;
+    color: #036;
+}
+
+.json-number {
+    font-weight: bold;
+    color: #660;
+}
+
+.json-string {
+    color: #800;
+}
+
+.json-schema-map > .json-object-key {
+    color: #080;
+    font-style: italic;
+}
+

@@ -24,9 +24,9 @@ $(function() {
     var ready = $.Deferred();
     var template;
     var source;
-
     var stack = [];
-    
+    var current = {};
+
     Handlebars.registerHelper('scope', function(schema, options) {
         if(schema && (schema.id || schema.root)) {
             stack.push( schema );
@@ -35,6 +35,10 @@ $(function() {
         } else {
             return options.fn(this);
         }
+    });
+
+    Handlebars.registerHelper('source', function(schema, options) {
+        return JSON.stringify(schema, null, 2);
     });
 
     Handlebars.registerHelper('desc', function(title, description) {
@@ -88,12 +92,21 @@ $(function() {
         return ref;
     });
 
+    function renderSchema(schema, id) {
+        var message = id ? "Could not resolve schema "+id : "Null schema";
+        if(schema) {
+            return new Handlebars.SafeString(template(schema));
+        } else {
+            return new Handlebars.SafeString("<span class='error'>"+message+"</span>");
+        }
+    }
+
     Handlebars.registerHelper('ref', function(ref) {
-        return new Handlebars.SafeString(template(resolveIdRef(ref)));
+        return renderSchema(resolveIdRef(ref), ref);
     });
 
     Handlebars.registerHelper('schema', function(schema) {
-        return new Handlebars.SafeString(template(schema));
+        return renderSchema(schema);
     });
 
     $.get("template.html").done(function(content) {
@@ -109,6 +122,10 @@ $(function() {
             }
             schema.root = true;
             element.addClass("docson").html(template(schema));
+
+            if(highlightJson) {
+                highlightJson();
+            }
 
             element.find(".property-type-expandable").click(function() {
                 $(this).toggleClass("property-type-expanded");
@@ -126,7 +143,11 @@ $(function() {
                     $(this).parent().parent().find(".property-type-container").show(300);
                     this.expanded=true;
                 }
-            })
+            });
+            element.find(".source-button").click(function() {
+                $(this).parent().parent().children(".type-body").toggle();
+                $(this).parent().parent().children(".source").toggle();
+            });
         })
     }
 });

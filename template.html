@@ -14,10 +14,11 @@
  limitations under the License.
 }}
 {{#scope this}}
-<div class="type-container">
+ <div class="type-container">
     <div class="type-header">
         {{#if id}}<div class="type-name {{#if root}}title{{/if}}">{{id}}</div>{{/if}}
         <div class="type-description desc">{{desc title description}}</div>
+        <div class="source-button button" title="Source"> {} </div>
         <div class="type-header-end"></div>
     </div>
     <div class="type-body">
@@ -38,7 +39,7 @@
                         {{/equals}}
                         {{#if items.$ref}}
                         <span class="property-type-ref property-type-expandable button">{{refName items.$ref}}</span>
-                        {{/if}}                    
+                        {{/if}}
                     {{/equals}}
                     {{#primitive type}}
                         <span class="property-type-{{type}}">{{type}}</span>
@@ -63,13 +64,17 @@
             </div>
             {{/equals}}
             {{#if items.$ref}}
-            <div class="property-type-container">            
+            <div class="property-type-container">
                 {{ref items.$ref}}
             </div>
             {{/if}}
         </div>
         {{/each}}
         {{/if}}
+    </div>
+    <div class="source">
+        <pre class="json-schema">
+{{source this}}</pre>
     </div>
 </div>
 {{/scope}}
