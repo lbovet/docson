@@ -93,9 +93,12 @@ $(function() {
     }
 
     var resolvePointerRef = function(ref) {
-        console.log(stack[0], ref);
+        var root = stack[0];
+        if(ref=="#") {
+            return root;
+        }
         try {
-            return jsonpointer.get(stack[0], ref ==="#" ? "/" : ref);
+            return jsonpointer.get(stack[0], ref);
         } catch(e) {
             console.log(e);
             return null;
@@ -112,32 +115,43 @@ $(function() {
 
     var getName = function(schema) {
         if(!schema) {
-            return "<none>";
+            return "<error>";
         }
         var name = schema.title;
-        if(!name && schema.id) {
-            name = schema.id;
-        }
-        if(name =="#") {
-            name == "<root>";
-        }
+        name = !name && schema.id ? schema.id: name;
+        console.log(name);
         return name;
     }
 
+    Handlebars.registerHelper('name', function(schema) {
+        return getName(schema);
+    });
+
     Handlebars.registerHelper('refName', function(ref) {
         if(ref.indexOf("#") != -1) {
-            return getName(resolvePointerRef(ref));
+            var name = getName(resolvePointerRef(ref));
+            if(!name) {
+                if(ref == "#") {
+                    name = "<root>";
+                } else {
+                    var segments = ref.replace("#", "/").split("/");
+                    name = name || segments[segments.length-1];
+                }
+            }
+            return name;
         } else {
             return ref;
         }
     });
 
     function renderSchema(schema, id) {
-        var message = id ? "Could not resolve schema "+id : "Null schema";
-        if(schema) {
-            return new Handlebars.SafeString(template(schema));
-        } else {
-            return new Handlebars.SafeString("<span class='error'>"+message+"</span>");
+        if(stack.indexOf(schema) == -1) { // avoid recursion
+            var message = id ? "Could not resolve schema "+id : "Null schema";
+            if(schema) {
+                return new Handlebars.SafeString(template(schema));
+            } else {
+                return new Handlebars.SafeString("<span class='error'>"+message+"</span>");
+            }
         }
     }
 
