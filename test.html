@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Docson Example</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/docson.css">
+    <script src="js/jsonpointer.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/handlebars.js"></script>
+    <script src="js/highlight.js"></script>
+    <script src="js/docson.js"></script>
+    <script src="js/markdown.js"></script>
+    <style>
+        body {
+            font-family: verdana, helvetica;
+        }
+    </style>
+</head>
+<body>
+<script charset="utf-8">
+    var tests = ["properties", "ref"]
+    $(function() {
+        $.each(tests, function(k, test) {
+            var block = $("<div/>");
+            $("body").append("<h2>"+test+"</h2>");
+            $("body").append(block);
+            $.get("tests/"+test+".json").done(function(items) {
+                $.each(items, function(k, item) {
+                    var element = $("<div/>");
+                    block.append(element);
+                    item.schema.description = item.description;
+                    docson.doc(element, item.schema);
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>

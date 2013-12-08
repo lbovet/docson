@@ -17,9 +17,9 @@
  <div class="type-container">
     <div class="type-header">
         {{#if id}}<div class="type-name {{#if root}}title{{/if}}">{{id}}</div>{{/if}}
-        <div class="type-description desc">{{desc title description}}</div>
+        <div class="type-description desc">{{desc id title description}}</div>
         <div class="source-button button" title="Source"> {} </div>
-        <div class="type-header-end"></div>
+        <div class="end"></div>
     </div>
     <div class="type-body">
         <div class="expand button" title="Expand all">+</div>
@@ -51,7 +51,7 @@
                         <span class="property-type-ref property-type-expandable button">{{refName $ref}}</span>
                     {{/if}}
                 </div>
-                <div class="property-description desc">{{desc title description}}</div>
+                <div class="property-description desc">{{desc id title description}}</div>
             </div>
             {{#if $ref}}
             <div class="property-type-container">
@@ -65,7 +65,7 @@
             {{/equals}}
             {{#if items.$ref}}
             <div class="property-type-container">
-                {{ref items.$ref}}
+                {{ref items.$ref ..}}
             </div>
             {{/if}}
         </div>
@@ -77,4 +77,5 @@
 {{source this}}</pre>
     </div>
 </div>
+<div class="end"/>
 {{/scope}}

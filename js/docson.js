@@ -25,23 +25,27 @@ $(function() {
     var template;
     var source;
     var stack = [];
-    var current = {};
 
     Handlebars.registerHelper('scope', function(schema, options) {
         if(schema && (schema.id || schema.root)) {
             stack.push( schema );
-            return options.fn(this);
+            var result = options.fn(this);
             stack.pop();
+            return result;
         } else {
             return options.fn(this);
         }
     });
 
-    Handlebars.registerHelper('source', function(schema, options) {
+    Handlebars.registerHelper('source', function(schema) {
+        delete schema.root;
         return JSON.stringify(schema, null, 2);
     });
 
-    Handlebars.registerHelper('desc', function(title, description) {
+    Handlebars.registerHelper('desc', function(id, title, description) {
+        if(!id) {
+            title = undefined;
+        }
         if( !title && !description ) return "";
         var text = title ? title : "";
         text = text + (title ? "\n"+description: description);
@@ -88,8 +92,44 @@ $(function() {
         return null;
     }
 
+    var resolvePointerRef = function(ref) {
+        console.log(stack[0], ref);
+        try {
+            return jsonpointer.get(stack[0], ref ==="#" ? "/" : ref);
+        } catch(e) {
+            console.log(e);
+            return null;
+        }
+    }
+
+    var resolveRef = function(ref) {
+        if(ref.indexOf("#") != -1) {
+            return resolvePointerRef(ref);
+        } else {
+            return resolveIdRef(ref);
+        }
+    }
+
+    var getName = function(schema) {
+        if(!schema) {
+            return "<none>";
+        }
+        var name = schema.title;
+        if(!name && schema.id) {
+            name = schema.id;
+        }
+        if(name =="#") {
+            name == "<root>";
+        }
+        return name;
+    }
+
     Handlebars.registerHelper('refName', function(ref) {
-        return ref;
+        if(ref.indexOf("#") != -1) {
+            return getName(resolvePointerRef(ref));
+        } else {
+            return ref;
+        }
     });
 
     function renderSchema(schema, id) {
@@ -102,7 +142,7 @@ $(function() {
     }
 
     Handlebars.registerHelper('ref', function(ref) {
-        return renderSchema(resolveIdRef(ref), ref);
+        return renderSchema(resolveRef(ref), ref);
     });
 
     Handlebars.registerHelper('schema', function(schema) {
@@ -120,11 +160,16 @@ $(function() {
             if(typeof element == "string") {
                 element = $("#"+element);
             }
+            if(typeof schema == "string") {
+                schema = JSON.parse(schema);
+            }
             schema.root = true;
             element.addClass("docson").html(template(schema));
 
-            if(highlightJson) {
-                highlightJson();
+            if(highlight) {
+                element.find(".json-schema").each(function(k, schemaElement) {
+                    highlight.highlightSchema(schemaElement);
+                });
             }
 
             element.find(".property-type-expandable").click(function() {

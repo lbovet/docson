@@ -80,8 +80,12 @@
     max-width: 600px;
 }
 
-.type-header-end {
+.end {
     clear: both;
+}
+
+.error {
+    color: red;
 }
 
 .type-body {
