@@ -2,121 +2,112 @@
 <html>
 <head>
     <title>Docson Example</title>
+    <meta charset="utf-8">
     <link rel="stylesheet" href="css/docson.css">
+    <script src="js/jsonpointer.js"></script>
     <script src="js/jquery.js"></script>
+    <script src="js/handlebars.js"></script>
     <script src="js/docson.js"></script>
+    <script src="js/markdown.js"></script>
 </head>
 <body>
-    <div class="docson">
-        <div class="type-container">
-            <div class="type-header">
-                <div class="type-name title">Invoice</div>
-                <div class="type-description">Represents a customer order with all information needed for the packaging, delivery and payment</div>
-
-                <div class="type-header-end"></div>
-            </div>
-            <div class="type-body">
-                <div class="expand button" title="Expand all">+</div>
-                <div class="property">
-                    <div class="property-header">
-                        <div class="property-name">no</div>
-                        <div class="property-type">
-                            <span class="property-type-integer">integer</span>
-                        </div>
-                        <div class="property-description">Identifies the invoice<br>blabla<br>blublu</div>
-                    </div>
-                </div>
-                <div class="property">
-                    <div class="property-header">
-                        <div class="property-name">no</div>
-                        <div class="property-type">
-                            <span class="property-type-integer">integer</span>
-                        </div>
-                        <div class="property-description">Identifies the invoice with a very long line of text that will break if I put even more text inside it</div>
-                    </div>
-                </div>
-                <div class="property">
-                    <div class="property-header">
-                        <div class="property-name">no</div>
-                        <div class="property-type">
-                            <span class="property-type-integer">integer</span>
-                        </div>
-                        <div class="property-description">Identifies the invoice</div>
-                    </div>
-                </div>
-                <div class="property">
-                    <div class="property-header">
-                        <div class="property-name">customer</div>
-                        <div class="property-type">
-                            <span class="property-type-ref property-type-expandable button">Customer</span>
-                        </div>
-                        <div class="property-description">Who is going to pay</div>
-                    </div>
-                    <div class="property-type-container">
-                        <div class="type-container">
-                            <div class="type-header">
-                                <div class="type-description">A person or company</div>
-                                <div class="type-header-end"></div>
-                            </div>
-                            <div class="type-body">
-                                <div class="property">
-                                    <div class="property-header">
-                                        <div class="property-name">id</div>
-                                        <div class="property-type">
-                                            <span class="property-type-string">string</span>
-                                        </div>
-                                        <div class="property-description">Identifies the customer</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="property">
-                    <div class="property-header">
-                        <div class="property-name">lines</div>
-                        <div class="property-type">
-                            <span class="property-collection">array</span>
-                            <span class="property-type-ref property-type-expandable button">InvoiceLine</span>
-                        </div>
-                        <div class="property-description">The invoice content</div>
-                    </div>
-                </div>
-                <div class="property">
-                    <div class="property-header">
-                        <div class="property-name">properties</div>
-                        <div class="property-type">
-                            <span class="property-collection">array</span>
-                            <span class="property-type-object property-type-expandable button">object</span>
-                        </div>
-                        <div class="property-description">Some additional info</div>
-                    </div>
-                    <div class="property-type-container">
-                        <div class="type-container">
-                            <div class="type-body">
-                                <div class="property">
-                                    <div class="property-header">
-                                        <div class="property-name">key</div>
-                                        <div class="property-type">
-                                            <span class="property-type-string">string</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="property">
-                                    <div class="property-header">
-                                        <div class="property-name">value</div>
-                                        <div class="property-type">
-                                            <span class="property-type-string">string</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+<div id="doc"></div>
+<script charset="utf-8">
+    $(function() {
+        var schema =
+        {
+            "id": "Invoice",
+            "description": "Represents the _document_ sent to the customer for payment.",
+            "properties": {
+                "customer": {
+                    "description": "Who will pay?\nNot me! éàè",
+                    "type": "string"
+                },
+                "lines": {
+                    "description": "Invoice content ",
+                    "type": "array",
+                    "items": {
+                        "$ref": "InvoiceLine"
+                    }
+                },
+                "dimension": {
+                    "description": "Total dimension of the order ",
+                    "$ref": "Dimension"
+                },
+                "props": {
+                    "type": "object",
+                    "properties": {
+                        "key": {
+                            "type": "string"
+                        },
+                        "value" : {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "required": [ "customer" ],
+            "InvoiceLine": {
+                "id": "InvoiceLine",
+                "properties": {
+                    "product": {
+                        "$ref": "Product"
+                    },
+                    "quantity": {
+                        "type": "number"
+                    }
+                }
+            },
+            "Dimension": {
+                "id": "Dimension",
+                "properties": {
+                    "width": {
+                        "description": "Width in cm ",
+                        "type": "number"
+                    },
+                    "height": {
+                        "description": "Height in cm ",
+                        "type": "number"
+                    },
+                    "length": {
+                        "description": "Length in cm ",
+                        "type": "number"
+                    }
+                }
+            },
+            "Product": {
+                "id": "Product",
+                "properties": {
+                    "name": {
+                        "description": "Uniquely defines the product ",
+                        "type": "string"
+                    },
+                    "dimension": {
+                        "description": "How big it is ",
+                        "$ref": "Dimension"
+                    },
+                    "category": {
+                        "description": "Classification ",
+                        "$ref": "Category"
+                    }
+                }
+            },
+            "Category": {
+                "id": "Category",
+                "properties": {
+                    "name": {
+                        "description": "Uniquely identifies the category ",
+                        "type": "string"
+                    },
+                    "level": {
+                        "description": "Classification level from 1 to 5 (highest) ",
+                        "type": "number"
+                    }
+                }
+            }
+        }
+        docson.doc("doc", schema);
+    });
+</script>
 </body>
 </html>

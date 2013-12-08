@@ -26,18 +26,21 @@
     border: 1px solid lightgrey;
     border-radius: 4px;
     -moz-border-radius: 4px;
+    margin-top: 2px;
     padding-bottom: 10px;
 }
 
 .expand {
+    float: right;
+    right: 2px;
     margin-right: -10px;
+    margin-bottom: -10px;
     width: 18px;
     text-align: center;
     cursor: pointer;
-    float: right;
     font-weight: bold;
     font-size: 120%;
-    color: grey;
+    color: lightgrey;
 }
 
 .type-header {
@@ -47,8 +50,8 @@
 }
 
 .type-name {
+    color: darkblue;
     padding: 2px 40px 2px 2px;
-    font-weight: bold;
     float: left;
 }
 
@@ -84,9 +87,13 @@
 }
 
 .property-name {
-    font-weight: bold;
     float: left;
+    font-family: monospace;
     min-width: 130px;
+}
+
+.required {
+    font-weight: bold;
 }
 
 .property-collection {
@@ -117,8 +124,8 @@
 }
 
 .property-type-object {
+    color: darkblue;
     cursor: pointer;
-    z-index: -1;
     padding: 4px;
     border: 1px solid lightgrey;
     border-radius: 4px;
@@ -127,21 +134,19 @@
 }
 
 .property-type-ref {
+    color: darkblue;
+    background: gainsboro;
     cursor: pointer;
     padding: 4px;
-    background: gainsboro;
-    border: 1px solid lightgrey;
+    border: 0px;
     border-radius: 4px;
     -moz-border-radius: 4px;
 }
 
 .property-type-expanded {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    -moz-border-bottom-left-radius: 0px;
-    -moz-border-bottom-right-radius: 0px;
-    padding-bottom: 6px;
-    border-bottom: none;
+    background: ghostwhite;
+    color: lightslategray;
+    border: none;
 }
 
 .property-description {
@@ -165,4 +170,8 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.desc > p {
+    margin: 0;
 }

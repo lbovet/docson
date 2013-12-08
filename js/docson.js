@@ -17,6 +17,7 @@
 // Docson 0.1
 
 var docson = docson || {};
+var exports = exports || {};
 
 $(function() {
 
@@ -36,6 +37,19 @@ $(function() {
         }
     });
 
+    Handlebars.registerHelper('desc', function(title, description) {
+        if( !title && !description ) return "";
+        var text = title ? title : "";
+        text = text + (title ? "\n"+description: description);
+        text = text.replace("\n", "\n\n").trim();
+        var markdown = exports.Markdown;
+        if(markdown) {
+            return new Handlebars.SafeString(markdown.toHTML(text));
+        } else {
+            return text;
+        }
+    });
+
     Handlebars.registerHelper('equals', function(lvalue, rvalue, options) {
         if (arguments.length < 3)
             throw new Error("Handlebars Helper equals needs 2 parameters");
@@ -46,14 +60,21 @@ $(function() {
         }
     });
 
+    Handlebars.registerHelper('contains', function(arr, item, options) {;
+        if(arr && arr.indexOf(item) != -1) {
+            return options.fn(this);
+        }
+    });
+
     Handlebars.registerHelper('primitive', function(type, options) {
-        if(typeof type != "object" && type != "array") {
+        if(type && type != "object" && type != "array") {
             return options.fn(this);
         }
     });
 
     var resolveIdRef = function(ref) {
         if(stack) {
+            var i;
             for(i=stack.length-1; i>=0; i--) {
                 if(stack[i][ref]) {
                     return stack[i][ref];
@@ -68,8 +89,11 @@ $(function() {
     });
 
     Handlebars.registerHelper('ref', function(ref) {
-        var template = Handlebars.compile(source);
         return new Handlebars.SafeString(template(resolveIdRef(ref)));
+    });
+
+    Handlebars.registerHelper('schema', function(schema) {
+        return new Handlebars.SafeString(template(schema));
     });
 
     $.get("template.html").done(function(content) {
