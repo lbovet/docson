@@ -3,7 +3,7 @@ docson
 
 Documentation for your JSON types.
 
-Give Docson a schema and it will create a beautiful documentation.
+Give Docson a JSON schema and it will create a beautiful documentation.
 
 Runs entirely in the browser.
 
