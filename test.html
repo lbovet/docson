@@ -18,7 +18,7 @@
 </head>
 <body>
 <script charset="utf-8">
-    var tests = ["properties", "ref"]
+    var tests = ["allOf", "example2", "properties", "ref"]
     $(function() {
         $.each(tests, function(k, test) {
             var block = $("<div/>");
@@ -28,7 +28,7 @@
                 $.each(items, function(k, item) {
                     var element = $("<div/>");
                     block.append(element);
-                    item.schema.description = item.description;
+                    item.schema.description |= item.description;
                     docson.doc(element, item.schema);
                 });
             });

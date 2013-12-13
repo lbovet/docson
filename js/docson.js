@@ -19,22 +19,29 @@
 var docson = docson || {};
 var exports = exports || {};
 
+docson.templateBaseUrl="templates";
+
 $(function() {
 
     var ready = $.Deferred();
-    var template;
+    var boxTemplate;
+    var signatureTemplate;
     var source;
     var stack = [];
+    var boxes=[];
 
     Handlebars.registerHelper('scope', function(schema, options) {
+        var result;
+        boxes.push([]);
         if(schema && (schema.id || schema.root)) {
             stack.push( schema );
-            var result = options.fn(this);
+            result = options.fn(this);
             stack.pop();
-            return result;
         } else {
-            return options.fn(this);
+            result = options.fn(this);
         }
+        boxes.pop();
+        return result;
     });
 
     Handlebars.registerHelper('source', function(schema) {
@@ -42,13 +49,14 @@ $(function() {
         return JSON.stringify(schema, null, 2);
     });
 
-    Handlebars.registerHelper('desc', function(id, title, description) {
-        if(!id) {
-            title = undefined;
-        }
+    Handlebars.registerHelper('desc', function(schema) {
+        id = schema.id;
+        title = schema.title;
+        description = schema.description;
+
         if( !title && !description ) return "";
         var text = title ? title : "";
-        text = text + (title ? "\n"+description: description);
+        text = text + (description ? (title ? "\n"+description: description) : "");
         text = text.replace("\n", "\n\n").trim();
         var markdown = exports.Markdown;
         if(markdown) {
@@ -78,6 +86,80 @@ $(function() {
         if(type && type != "object" && type != "array") {
             return options.fn(this);
         }
+    });
+
+    Handlebars.registerHelper('range', function(from, to, replFrom, replTo, exclFrom, exclTo, sep) {
+        var result = "";
+        if(from !== undefined || to !== undefined) {
+            result += exclFrom ? "]" : "[";
+            result += from !== undefined ? from : replFrom;
+            if( (from || replFrom) !== (to || replTo)) {
+                result += (from !== undefined || replFrom !== null) && (to !== undefined || replTo !== null) ? sep : "";
+                result += to !== undefined ? to : replTo;
+            }
+            result += exclTo ? "[" : "]";
+            return result;
+        }
+    });
+
+    var sub = function(schema) {
+        return schema.type == "array";
+    }
+
+    Handlebars.registerHelper('sub', function(schema, options) {
+        if(sub(schema)) {
+            return options.fn(this);
+        }
+    });
+
+    Handlebars.registerHelper('main', function(schema, options) {
+        if(!sub(schema)) {
+            return options.fn(this);
+        }
+    });
+
+    var simpleSchema = function(schema) {
+        var result = schema.description===undefined && schema.title===undefined && schema.id===undefined;
+        result &= schema.properties===undefined;
+        return result;
+    };
+
+    Handlebars.registerHelper('simple', function(schema, options) {
+        if(simpleSchema(schema) && !schema.$ref) {
+            return options.fn(this);
+        }
+    });
+
+    Handlebars.registerHelper('complex', function(schema, options) {
+        if(!simpleSchema(schema) && !schema.$ref || schema.properties) {
+            return options.fn(this);
+        }
+    });
+
+    Handlebars.registerHelper('obj', function(schema, options) {
+        if(schema.properties || schema.type == "object") {
+            return options.fn(schema);
+        }
+    });
+
+    var pushBox = function(schema) {
+        boxes[boxes.length-1].push(schema);
+    }
+
+    Handlebars.registerHelper('box', function(schema, options) {
+        if(schema) {
+            pushBox(schema);
+            return options.fn(schema);
+        }
+    });
+
+    Handlebars.registerHelper('boxes', function(options) {
+        var result="";
+        $.each(boxes[boxes.length-1], function(k, box) {
+            result=result+options.fn(box);
+        });
+        boxes[boxes.length-1].pop();
+        return result;
     });
 
     var resolveIdRef = function(ref) {
@@ -119,7 +201,6 @@ $(function() {
         }
         var name = schema.title;
         name = !name && schema.id ? schema.id: name;
-        console.log(name);
         return name;
     }
 
@@ -127,45 +208,66 @@ $(function() {
         return getName(schema);
     });
 
-    Handlebars.registerHelper('refName', function(ref) {
+    var refName = function(ref) {
+        var name = ref;
         if(ref.indexOf("#") != -1) {
-            var name = getName(resolvePointerRef(ref));
+            name = getName(resolvePointerRef(ref));
             if(!name) {
                 if(ref == "#") {
                     name = "<root>";
                 } else {
-                    var segments = ref.replace("#", "/").split("/");
-                    name = name || segments[segments.length-1];
+                    name = ref.replace("#", "/")
                 }
             }
-            return name;
-        } else {
-            return ref;
         }
-    });
+        var segments = name.split("/");
+        name = segments[segments.length-1];
+        return name;
+    }
 
-    function renderSchema(schema, id) {
+    function renderSchema(schema) {
         if(stack.indexOf(schema) == -1) { // avoid recursion
-            var message = id ? "Could not resolve schema "+id : "Null schema";
-            if(schema) {
-                return new Handlebars.SafeString(template(schema));
-            } else {
-                return new Handlebars.SafeString("<span class='error'>"+message+"</span>");
-            }
+            return new Handlebars.SafeString(boxTemplate(schema));
         }
     }
 
-    Handlebars.registerHelper('ref', function(ref) {
-        return renderSchema(resolveRef(ref), ref);
+    Handlebars.registerHelper('ref', function(schema, options) {
+        if(schema.$ref) {
+            var target = resolveRef(schema.$ref);
+            if(target) {
+                target.__name = refName(schema.$ref);
+            }
+            var result = options.fn(target);
+            if(target) {
+                delete target.__name;
+            }
+            return result;
+        }
     });
 
     Handlebars.registerHelper('schema', function(schema) {
         return renderSchema(schema);
     });
 
-    $.get("template.html").done(function(content) {
+    Handlebars.registerHelper('signature', function(schema, keyword, schemas) {
+        if(!schemas) {
+            schemas = []
+        }
+        schemas = typeof schemas == "array"? schemas : [schemas];
+        return new Handlebars.SafeString(signatureTemplate({ schema: schema, keyword: keyword, schemas: schemas}));
+    });
+
+    Handlebars.registerHelper('l', function(context) {
+        console.log(context);
+    });
+
+    $.when( $.get(docson.templateBaseUrl+"/box.html").done(function(content) {
         source = content
-        template = Handlebars.compile(source);
+        boxTemplate = Handlebars.compile(source);
+    }), $.get(docson.templateBaseUrl+"/signature.html").done(function(content) {
+        source = content
+        signatureTemplate = Handlebars.compile(source);
+    })).always(function() {
         ready.resolve();
     });
 
@@ -178,7 +280,8 @@ $(function() {
                 schema = JSON.parse(schema);
             }
             schema.root = true;
-            element.addClass("docson").html(template(schema));
+
+            element.addClass("docson").html(boxTemplate(schema));
 
             if(highlight) {
                 element.find(".json-schema").each(function(k, schemaElement) {
@@ -186,25 +289,25 @@ $(function() {
                 });
             }
 
-            element.find(".property-type-expandable").click(function() {
-                $(this).toggleClass("property-type-expanded");
-                $(this).parent().parent().parent().children(".property-type-container").toggle(300);
+            element.find(".signature-type-expandable").click(function() {
+                $(this).toggleClass("signature-type-expanded");
+                $(this).parent().parent().parent().children(".signature-box-container").toggle(300);
             });
             element.find(".expand").click(function() {
                 if(this.expanded) {
                     $(this).html(" + ").attr("title", "Expand all");                
-                    $(this).parent().parent().find(".property-type-expandable").removeClass("property-type-expanded");
-                    $(this).parent().parent().find(".property-type-container").hide(300);
+                    $(this).parent().parent().find(".signature-type-expandable").removeClass("signature-type-expanded");
+                    $(this).parent().parent().find(".signature-box-container").hide(300);
                     this.expanded=false;
                 } else {
                     $(this).html(" - ").attr("title", "Collapse all");
-                    $(this).parent().parent().find(".property-type-expandable").addClass("property-type-expanded");
-                    $(this).parent().parent().find(".property-type-container").show(300);
+                    $(this).parent().parent().find(".signature-type-expandable").addClass("signature-type-expanded");
+                    $(this).parent().parent().find(".signature-box-container").show(300);
                     this.expanded=true;
                 }
             });
             element.find(".source-button").click(function() {
-                $(this).parent().parent().children(".type-body").toggle();
+                $(this).parent().parent().children(".box-body").toggle();
                 $(this).parent().parent().children(".source").toggle();
             });
         })

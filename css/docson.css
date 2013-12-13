@@ -20,7 +20,7 @@
     padding: 6px 6px 6px 6px;
 }
 
-.type-container {
+.box {
     float: left;
     background: white;
     border: 1px solid lightgrey;
@@ -57,13 +57,13 @@
     color: darkgray;
 }
 
-.type-header {
+.box-header {
     padding: 6px;
     background: gainsboro;
     border-bottom: lightgrey;
 }
 
-.type-name {
+.box-name {
     color: darkblue;
     padding: 2px 40px 2px 2px;
     float: left;
@@ -74,7 +74,7 @@
     font-size: 120%;
 }
 
-.type-description {
+.box-description {
     color: dimgray;
     float: left;
     max-width: 600px;
@@ -88,18 +88,19 @@
     color: red;
 }
 
-.type-body {
+.box-body {
+    padding-top: 8px;
     padding-left: 10px;
     padding-right: 14px;
     clear: both;
 }
 
-.property {
+.signature {
     padding-top: 12px;
     clear: left;
 }
 
-.property-header {
+.signature-header {
     padding-top: 3px;
     height: 20px;
 }
@@ -114,35 +115,34 @@
     font-weight: bold;
 }
 
-.property-collection {
+.type-keyword {
     font-size: 80%;
     color: dimgray;
 }
 
-.property-type {
+.signature-type {
     padding-left: 6px;
     float: left;
     min-width: 160px;
 }
 
-.property-type-string {
+.signature-type-string {
     color: green;
 }
 
-.property-type-number {
+.signature-type-number {
     color: blue;
 }
 
-.property-type-integer {
+.signature-type-integer {
     color: blueviolet;
 }
 
-.property-type-boolean {
+.signature-type-boolean {
     color: orangered;
 }
 
-.property-type-object {
-    color: darkblue;
+.signature-button {
     cursor: pointer;
     padding: 4px;
     border: 1px solid lightgrey;
@@ -151,7 +151,7 @@
 
 }
 
-.property-type-ref {
+.signature-type-ref {
     color: darkblue;
     background: gainsboro;
     cursor: pointer;
@@ -161,13 +161,11 @@
     -moz-border-radius: 4px;
 }
 
-.property-type-expanded {
-    background: ghostwhite;
-    color: lightslategray;
-    border: none;
+.signature-type-expanded {
+    opacity: 0.4;
 }
 
-.property-description {
+.signature-description {
     padding-left: 6px;
     padding-bottom: 3px;
     color: dimgray;
@@ -175,10 +173,15 @@
     max-width: 600px;
 }
 
-.property-type-container {
+.signature-box-container {
+    clear: both;
+    //display: none;
+}
+
+.box-container {
+    float: left;
     padding-top: 3px;
     padding-left: 8px;
-    display: none;
 }
 
 .button {

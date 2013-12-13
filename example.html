@@ -22,13 +22,17 @@
             "properties": {
                 "customer": {
                     "description": "Who will pay?\nNot me! éàè",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 3
                 },
                 "lines": {
                     "description": "Invoice content ",
                     "type": "array",
+                    "minItems": 4,
+                    "maxItems": 4,
                     "items": {
-                        "$ref": "InvoiceLine"
+                        "description": "hello",
+                        "type": "string"
                     }
                 },
                 "dimension": {
@@ -37,12 +41,14 @@
                 },
                 "props": {
                     "type": "object",
+                    "description": "hello",
                     "properties": {
                         "key": {
-                            "type": "string"
+                            "type": "string",
+                            "pattern": "[a-z][0-9]_"
                         },
                         "value" : {
-                            "type": "object"
+                            "type": "string"
                         }
                     }
                 }
@@ -61,10 +67,13 @@
             },
             "Dimension": {
                 "id": "Dimension",
+                "title": "Dim",
                 "properties": {
                     "width": {
                         "description": "Width in cm ",
-                        "type": "number"
+                        "type": "number",
+                        "minimum": 2,
+                        "exclusiveMinimum": true
                     },
                     "height": {
                         "description": "Height in cm ",

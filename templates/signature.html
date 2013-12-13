@@ -1,0 +1,56 @@
+{{!
+ Copyright 2013 Laurent Bovet (laurent.bovet@windmaster.ch)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+}}
+{{#if keyword}}
+    <span class="type-keyword">{{keyword}}{{range schema.minItems schema.maxItems 0 "∞" false false ".."}}</span>
+    {{l schemas}}
+    {{#each schemas}}
+        {{#simple this}}
+            <span class="signature-type-{{type}}">
+                {{type}}{{range minLength maxLength 0 "∞" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}</span>
+        {{/simple}}
+        {{#complex this}}
+            {{#box this}}
+                <span class="signature-type-{{type}} signature-button signature-type-expandable button">{{type}}</span>
+            {{/box}}
+        {{/complex}}
+        {{#ref this}}
+            {{#box this}}
+                <span class="signature-type-ref signature-type-expandable button">{{__name}}</span>
+            {{/box}}
+        {{/ref}}
+    {{/each}}
+{{/if}}
+{{#unless keyword}}
+    {{#each schemas}}
+        {{#primitive type}}
+           <span class="signature-type-{{type}}">
+               {{type}}{{range minLength maxLength 0 "∞" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}</span>
+            {{#if pattern}}
+                <span class="type-keyword">/{{pattern}}/</span>
+            {{/if}}
+        {{/primitive}}
+        {{#ref this}}
+            {{#box this}}
+                <span class="signature-type-ref signature-type-expandable button">{{__name}}</span>
+            {{/box}}
+        {{/ref}}
+        {{#obj this}}
+            {{#box this}}
+                <span class="signature-type-{{type}} signature-button signature-type-expandable button">{{type}}</span>
+            {{/box}}
+        {{/obj}}
+    {{/each}}
+{{/unless}}
