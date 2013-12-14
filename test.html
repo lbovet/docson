@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Docson Example</title>
+    <title>Docson Test</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/docson.css">
     <script src="js/jsonpointer.js"></script>
@@ -18,7 +18,7 @@
 </head>
 <body>
 <script charset="utf-8">
-    var tests = ["allOf", "example2", "properties", "ref"]
+    var tests = ["additionalProperties", "address", "enum", "fstab", "basic", "not", "oneOf", "anyOf", "allOf", "example2", "properties", "ref"]
     $(function() {
         $.each(tests, function(k, test) {
             var block = $("<div/>");
@@ -28,7 +28,9 @@
                 $.each(items, function(k, item) {
                     var element = $("<div/>");
                     block.append(element);
-                    item.schema.description |= item.description;
+                    if(!item.schema.description) {
+                        item.schema.description = item.description;
+                    }
                     docson.doc(element, item.schema);
                 });
             });

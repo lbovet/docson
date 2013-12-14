@@ -15,20 +15,19 @@
 }}
 {{#if keyword}}
     <span class="type-keyword">{{keyword}}{{range schema.minItems schema.maxItems 0 "∞" false false ".."}}</span>
-    {{l schemas}}
     {{#each schemas}}
         {{#simple this}}
-            <span class="signature-type-{{type}}">
-                {{type}}{{range minLength maxLength 0 "∞" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}</span>
+            <span class="signature-type-{{__type}}">
+                {{__type}}{{range minLength maxLength 0 "∞" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}</span>
         {{/simple}}
         {{#complex this}}
             {{#box this}}
-                <span class="signature-type-{{type}} signature-button signature-type-expandable button">{{type}}</span>
+                <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-{{__type}} signature-button signature-type-expandable button">{{__type}}</span>
             {{/box}}
         {{/complex}}
         {{#ref this}}
             {{#box this}}
-                <span class="signature-type-ref signature-type-expandable button">{{__name}}</span>
+                <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-ref signature-button signature-type-expandable button">{{__name}}</span>
             {{/box}}
         {{/ref}}
     {{/each}}
@@ -36,20 +35,20 @@
 {{#unless keyword}}
     {{#each schemas}}
         {{#primitive type}}
-           <span class="signature-type-{{type}}">
-               {{type}}{{range minLength maxLength 0 "∞" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}</span>
+           <span class="signature-type-{{__type}}">
+               {{__type}}{{range minLength maxLength 0 "∞" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}</span>
             {{#if pattern}}
-                <span class="type-keyword">/{{pattern}}/</span>
+                <span class="type-pattern">/{{pattern}}/</span>
             {{/if}}
         {{/primitive}}
         {{#ref this}}
             {{#box this}}
-                <span class="signature-type-ref signature-type-expandable button">{{__name}}</span>
+                <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-ref signature-button signature-type-expandable button">{{__name}}</span>
             {{/box}}
         {{/ref}}
         {{#obj this}}
             {{#box this}}
-                <span class="signature-type-{{type}} signature-button signature-type-expandable button">{{type}}</span>
+                <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-{{__type}} signature-button signature-type-expandable button">{{__type}}</span>
             {{/box}}
         {{/obj}}
     {{/each}}

@@ -46,13 +46,13 @@ $(function() {
 
     Handlebars.registerHelper('source', function(schema) {
         delete schema.root;
+        delete schema.__boxId;
         return JSON.stringify(schema, null, 2);
     });
 
     Handlebars.registerHelper('desc', function(schema) {
-        id = schema.id;
-        title = schema.title;
-        description = schema.description;
+        var title = schema.title;
+        var description = schema.description;
 
         if( !title && !description ) return "";
         var text = title ? title : "";
@@ -84,6 +84,12 @@ $(function() {
 
     Handlebars.registerHelper('primitive', function(type, options) {
         if(type && type != "object" && type != "array") {
+            return withType(this, options)
+        }
+    });
+
+    Handlebars.registerHelper('exists', function(value, options) {
+        if(value !== undefined) {
             return options.fn(this);
         }
     });
@@ -103,7 +109,7 @@ $(function() {
     });
 
     var sub = function(schema) {
-        return schema.type == "array";
+        return schema.type == "array" || schema.allOf || schema.anyOf || schema.oneOf || schema.not || schema.enum || schema.additionalProperties;
     }
 
     Handlebars.registerHelper('sub', function(schema, options) {
@@ -126,19 +132,35 @@ $(function() {
 
     Handlebars.registerHelper('simple', function(schema, options) {
         if(simpleSchema(schema) && !schema.$ref) {
-            return options.fn(this);
+            return withType(schema, options);
         }
     });
 
+    var withType = function(schema, options) {
+        schema.__type = schema.type;
+        if(!schema.type) {
+            schema.__type="any";
+        }
+        if(schema.format) {
+            schema.__type=schema.format;
+        }
+        if( (schema.__type == "any" || schema.__type == "object") && schema.title) {
+            schema.__type = schema.title;
+        }
+        var result = options.fn(schema);
+        delete schema.__type;
+        return result;
+    }
+
     Handlebars.registerHelper('complex', function(schema, options) {
         if(!simpleSchema(schema) && !schema.$ref || schema.properties) {
-            return options.fn(this);
+            return withType(schema, options);
         }
     });
 
     Handlebars.registerHelper('obj', function(schema, options) {
         if(schema.properties || schema.type == "object") {
-            return options.fn(schema);
+            return withType(schema, options);
         }
     });
 
@@ -153,12 +175,17 @@ $(function() {
         }
     });
 
+    Handlebars.registerHelper('boxId', function() {
+        return boxes[boxes.length-1].length
+    });
+
     Handlebars.registerHelper('boxes', function(options) {
         var result="";
         $.each(boxes[boxes.length-1], function(k, box) {
+            box.__boxId = k+1;
             result=result+options.fn(box);
         });
-        boxes[boxes.length-1].pop();
+        boxes[boxes.length-1] = []
         return result;
     });
 
@@ -253,7 +280,7 @@ $(function() {
         if(!schemas) {
             schemas = []
         }
-        schemas = typeof schemas == "array"? schemas : [schemas];
+        schemas = schemas instanceof Array ? schemas : [schemas];
         return new Handlebars.SafeString(signatureTemplate({ schema: schema, keyword: keyword, schemas: schemas}));
     });
 
@@ -290,19 +317,21 @@ $(function() {
             }
 
             element.find(".signature-type-expandable").click(function() {
+                var boxId = $(this).attr("boxid");
+                console.log(boxId);
                 $(this).toggleClass("signature-type-expanded");
-                $(this).parent().parent().parent().children(".signature-box-container").toggle(300);
+                $(this).parent().parent().parent().children(".signature-box-container").children("[boxid='"+boxId+"']").toggle(300);
             });
             element.find(".expand").click(function() {
                 if(this.expanded) {
                     $(this).html(" + ").attr("title", "Expand all");                
                     $(this).parent().parent().find(".signature-type-expandable").removeClass("signature-type-expanded");
-                    $(this).parent().parent().find(".signature-box-container").hide(300);
+                    $(this).parent().parent().find(".box-container").hide(300);
                     this.expanded=false;
                 } else {
                     $(this).html(" - ").attr("title", "Collapse all");
                     $(this).parent().parent().find(".signature-type-expandable").addClass("signature-type-expanded");
-                    $(this).parent().parent().find(".signature-box-container").show(300);
+                    $(this).parent().parent().find(".box-container").show(300);
                     this.expanded=true;
                 }
             });

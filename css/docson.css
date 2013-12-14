@@ -24,8 +24,8 @@
     float: left;
     background: white;
     border: 1px solid lightgrey;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
     margin-top: 2px;
     padding-bottom: 10px;
 }
@@ -60,7 +60,9 @@
 .box-header {
     padding: 6px;
     background: gainsboro;
-    border-bottom: lightgrey;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: 1px solid lightgrey;
 }
 
 .box-name {
@@ -95,6 +97,38 @@
     clear: both;
 }
 
+.box-1 {
+    background: gainsboro;
+}
+
+.box-2 {
+    background: beige;
+}
+
+.box-3 {
+    background: azure;
+}
+
+.box-4 {
+    background: mistyrose;
+}
+
+.box-5 {
+    background: #ddffee;
+}
+
+.box-6 {
+    background: ghostwhite;
+}
+
+.box-7 {
+    background: lavenderblush;
+}
+
+.box-8 {
+    background: aliceblue;
+}
+
 .signature {
     padding-top: 12px;
     clear: left;
@@ -120,10 +154,30 @@
     color: dimgray;
 }
 
+.type-pattern {
+    font-size: 80%;
+    color: green;
+}
+
+.type-enum {
+    color: dimgray;
+    font-family: monospace;
+    padding-left: 2px;
+}
+
+.type-default {
+    color: darkslategrey;
+    font-family: monospace;
+}
+
 .signature-type {
     padding-left: 6px;
     float: left;
     min-width: 160px;
+}
+
+.signature-type-any {
+    font-style: italic;
 }
 
 .signature-type-string {
@@ -145,24 +199,17 @@
 .signature-button {
     cursor: pointer;
     padding: 4px;
+    border-radius: 6px;
     border: 1px solid lightgrey;
-    border-radius: 4px;
     -moz-border-radius: 4px;
-
 }
 
 .signature-type-ref {
     color: darkblue;
-    background: gainsboro;
-    cursor: pointer;
-    padding: 4px;
-    border: 0px;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
 }
 
 .signature-type-expanded {
-    opacity: 0.4;
+    opacity: 0.5;
 }
 
 .signature-description {
@@ -175,13 +222,13 @@
 
 .signature-box-container {
     clear: both;
-    //display: none;
 }
 
 .box-container {
     float: left;
     padding-top: 3px;
     padding-left: 8px;
+    display: none;
 }
 
 .button {

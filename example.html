@@ -25,6 +25,11 @@
                     "type": "string",
                     "maxLength": 3
                 },
+                "tags": {
+                    "additionalProperties": {
+                        "type": "number"
+                    }
+                },
                 "lines": {
                     "description": "Invoice content ",
                     "type": "array",
@@ -40,8 +45,6 @@
                     "$ref": "Dimension"
                 },
                 "props": {
-                    "type": "object",
-                    "description": "hello",
                     "properties": {
                         "key": {
                             "type": "string",
@@ -77,7 +80,9 @@
                     },
                     "height": {
                         "description": "Height in cm ",
-                        "type": "number"
+                        "type": "number",
+                        "format": "int64",
+                        "default": 0
                     },
                     "length": {
                         "description": "Length in cm ",

@@ -15,7 +15,7 @@
 }}
 {{#scope this}}
  <div class="box">
-    <div class="box-header">
+    <div class="box-header box-{{__boxId}}">
         {{#if id}}<div class="box-name {{#if root}}title{{/if}}">{{id}}</div>{{/if}}
         <div class="box-description desc">{{desc this}}</div>
         <div class="source-button button" title="Source">{}</div>
@@ -23,15 +23,43 @@
     </div>
     <div class="box-body">
         <div class="expand button" title="Expand all">+</div>
+        {{#sub this}}
         <div class="signature">
             <div class="signature-header">
                 <div class="signature-type">
+                    {{#primitive type}}
+                        {{signature this null this}}
+                    {{/primitive}}
+                    {{#if pattern}}
+                        <span class="type-pattern">/{{pattern}}/</span>
+                    {{/if}}
+                    {{#if enum}}
+                        {{#each enum}}
+                            <span class="type-enum">{{this}}</span>
+                        {{/each}}
+                    {{/if}}
                     {{#equals type "array"}}
                         {{signature this "array" items}}
                     {{/equals}}
                     {{#if allOf}}
                         {{signature this "all of" allOf}}
                     {{/if}}
+                    {{#if anyOf}}
+                        {{signature this "any of" anyOf}}
+                    {{/if}}
+                    {{#if oneOf}}
+                        {{signature this "one of" oneOf}}
+                    {{/if}}
+                    {{#if additionalProperties}}
+                        {{signature this "map" additionalProperties}}
+                    {{/if}}
+                    {{#if not}}
+                        {{signature this "not" not}}
+                    {{/if}}
+                    {{#exists default}}
+                        <span class="type-keyword">default</span>
+                        <span class="type-default">{{default}}</span>
+                    {{/exists}}
                 </div>
             </div>
             <div class="signature-box-container">
@@ -42,30 +70,55 @@
                 {{/boxes}}
             </div>
         </div>
+        {{/sub}}
         {{#if properties}}
-        {{#each properties}}
-        <div class="signature">
-            <div class="signature-header">
-                <div class="property-name {{#contains ../required @key}}required{{/contains}}">{{@key}}</div>
-                <div class="signature-type">
-                    {{#equals type "array"}}
-                        {{signature this "array" items}}
-                    {{/equals}}
-                    {{#main this}}
-                        {{signature this null this}}
-                    {{/main}}
+            {{#each properties}}
+            <div class="signature">
+                <div class="signature-header">
+                    <div class="property-name {{#contains ../required @key}}required{{/contains}}">{{@key}}</div>
+                    <div class="signature-type">
+                        {{#main this}}
+                            {{signature this null this}}
+                        {{/main}}
+                        {{#if enum}}
+                            {{#each enum}}
+                                <span class="type-enum">{{this}}</span>
+                            {{/each}}
+                        {{/if}}
+                        {{#exists default}}
+                            <span class="type-keyword">default</span>
+                            <span class="type-default">{{default}}</span>
+                        {{/exists}}
+                        {{#equals type "array"}}
+                            {{signature this "array" items}}
+                        {{/equals}}
+                        {{#if allOf}}
+                            {{signature this "all of" allOf}}
+                        {{/if}}
+                        {{#if anyOf}}
+                            {{signature this "any of" anyOf}}
+                        {{/if}}
+                        {{#if oneOf}}
+                            {{signature this "one of" oneOf}}
+                        {{/if}}
+                        {{#if additionalProperties}}
+                            {{signature this "map" additionalProperties}}
+                        {{/if}}
+                        {{#if not}}
+                            {{signature this "not" not}}
+                        {{/if}}
+                    </div>
+                    <div class="signature-description desc">{{desc this}}</div>
                 </div>
-                <div class="signature-description desc">{{desc this}}</div>
-            </div>
-            <div class="signature-box-container">
-            {{#boxes}}
-                <div class="box-container">
-                    {{schema this}}
+                <div class="signature-box-container">
+                {{#boxes}}
+                    <div class="box-container" boxid="{{__boxId}}">
+                        {{schema this}}
+                    </div>
+                {{/boxes}}
                 </div>
-            {{/boxes}}
             </div>
-        </div>
-        {{/each}}
+            {{/each}}
         {{/if}}
     </div>
     <div class="source">
