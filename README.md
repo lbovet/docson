@@ -11,5 +11,8 @@ Runs entirely in the browser.
 * [All tests](http://lbovet.github.io/docson/tests/test.html)
 * [See it in action](http://lbovet.github.io/typson-demo/) with its buddy [typson](https://github.com/lbovet/typson).
 
-Not yet implemented:
-* References to remote schema
+Not implemented:
+* Reference to remote schemas
+* Dependencies
+* Enum with non-primitive values
+* Non-primitive default values
