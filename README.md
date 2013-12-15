@@ -1,4 +1,4 @@
-docson
+Docson
 ======
 
 Documentation for your JSON types.
