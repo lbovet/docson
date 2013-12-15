@@ -27,8 +27,12 @@
     border: 1px solid lightgrey;
     border-radius: 6px;
     -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
     margin-top: 2px;
     padding-bottom: 10px;
+    -moz-box-shadow:    2px 2px 2px darkgray;
+    -webkit-box-shadow: 2px 2px 2px darkgray;
+    box-shadow:         2px 2px 2px darkgray;
 }
 
 .expand-button {
@@ -61,10 +65,12 @@
 
 .box-header {
     padding: 6px;
-    background: gainsboro;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom: 1px solid lightgrey;
+    background: gainsboro;
+    background: -webkit-linear-gradient(ghostwhite, gainsboro, gainsboro, lightgrey);
+    background: -moz-linear-gradient(ghostwhite, gainsboro, gainsboro, lightgrey);
 }
 
 .box-name {
@@ -100,34 +106,51 @@
 
 .box-1 {
     background: gainsboro;
+    background: -webkit-linear-gradient(ghostwhite, gainsboro, gainsboro, lightgrey);
+    background: -moz-linear-gradient(ghostwhite, gainsboro, gainsboro, lightgrey);
+
 }
 
 .box-2 {
     background: beige;
+    background: -webkit-linear-gradient(white, beige, beige, lightgrey);
+    background: -moz-linear-gradient(white, beige, beige, lightgrey);
 }
 
 .box-3 {
     background: azure;
+    background: -webkit-linear-gradient(white, azure, azure, lightgrey);
+    background: -moz-linear-gradient(white, azure, azure, lightgrey);
 }
 
 .box-4 {
     background: mistyrose;
+    background: -webkit-linear-gradient(white, mistyrose, mistyrose, lightgrey);
+    background: -moz-linear-gradient(white, mistyrose, mistyrose, lightgrey);
 }
 
 .box-5 {
     background: #ddffee;
+    background: -webkit-linear-gradient(white, #ddffee, #ddffee, lightgrey);
+    background: -moz-linear-gradient(white, #ddffee, #ddffee, lightgrey);
 }
 
 .box-6 {
     background: ghostwhite;
+    background: -webkit-linear-gradient(white, ghostwhite, ghostwhite, lightgrey);
+    background: -moz-linear-gradient(white, ghostwhite, ghostwhite, lightgrey);
 }
 
 .box-7 {
     background: lavenderblush;
+    background: -webkit-linear-gradient(white, lavenderblush, lavenderblush, lightgrey);
+    background: -moz-linear-gradient(white, lavenderblush, lavenderblush, lightgrey);
 }
 
 .box-8 {
     background: aliceblue;
+    background: -webkit-linear-gradient(white, aliceblue, aliceblue, lightgrey);
+    background: -moz-linear-gradient(white, aliceblue, aliceblue, lightgrey);
 }
 
 .signature {
@@ -157,7 +180,7 @@
 
 .type-pattern {
     font-size: 70%;
-    color: darkgreen;
+    color: darkolivegreen;
 }
 
 .type-enum {
@@ -240,6 +263,9 @@
 
 .signature-type-expanded {
     opacity: 0.5;
+    -moz-box-shadow:    inset 2px 2px 2px darkgray;
+    -webkit-box-shadow: inset 2px 2px 2px darkgray;
+    box-shadow:         inset 2px 2px 2px darkgray;
 }
 
 .signature-description {

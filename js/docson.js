@@ -308,7 +308,7 @@ $(function() {
         ready.resolve();
     });
 
-    docson.doc = function(element, schema) {
+    docson.doc = function(element, schema, ref) {
         ready.done(function() {
             if(typeof element == "string") {
                 element = $("#"+element);
@@ -316,9 +316,20 @@ $(function() {
             if(typeof schema == "string") {
                 schema = JSON.parse(schema);
             }
-            schema.root = true;
+            var target = schema;
+            if(ref) {
+                target = jsonpointer.get(schema, ref);
+                stack.push( schema );
+            }
 
-            element.addClass("docson").html(boxTemplate(schema));
+            target.root = true;
+            var html = boxTemplate(target);
+
+            if(ref) {
+                stack.pop();
+            }
+
+            element.addClass("docson").html(html);
 
             if(highlight) {
                 element.find(".json-schema").each(function(k, schemaElement) {

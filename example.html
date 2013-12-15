@@ -17,46 +17,48 @@
     $(function() {
         var schema =
         {
-            "id": "Invoice",
-            "description": "Represents the _document_ sent to the customer for payment.",
-            "properties": {
-                "customer": {
-                    "description": "Who will pay?\nNot me! éàè",
-                    "type": "string",
-                    "maxLength": 3
-                },
-                "tags": {
-                    "additionalProperties": {
-                        "type": "number"
-                    }
-                },
-                "lines": {
-                    "description": "Invoice content ",
-                    "type": "array",
-                    "minItems": 4,
-                    "maxItems": 4,
-                    "items": {
-                        "description": "hello",
-                        "type": "string"
-                    }
-                },
-                "dimension": {
-                    "description": "Total dimension of the order ",
-                    "$ref": "Dimension"
-                },
-                "props": {
-                    "properties": {
-                        "key": {
-                            "type": "string",
-                            "pattern": "[a-z][0-9]_"
-                        },
-                        "value" : {
-                            "type": "string"
+            "Invoice": {
+                "id": "Invoice",
+                "description": "Represents the _document_ sent to the customer for payment.",
+                "properties": {
+                    "customer": {
+                        "description": "Who will pay?\nNot me! éàè",
+                        "type": "string",
+                        "maxLength": 3
+                    },
+                    "tags": {
+                        "additionalProperties": {
+                            "type": "number"
                         }
+                    },
+                    "lines": {
+                        "description": "Invoice content ",
+                        "type": "array",
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {
+                            "$ref": "InvoiceLine"
+                        }
+                    },
+                    "dimension": {
+                        "description": "Total dimension of the order ",
+                        "$ref": "Dimension"
+                    },
+                    "props": {
+                        "properties": {
+                            "key": {
+                                "type": "string",
+                                "pattern": "[a-z][0-9]_"
+                            },
+                            "value" : {
+                                "type": "string"
+                            }
+                        }
+
                     }
-                }
+                },
+                "required": [ "customer" ]
             },
-            "required": [ "customer" ],
             "InvoiceLine": {
                 "id": "InvoiceLine",
                 "properties": {
@@ -121,7 +123,7 @@
                 }
             }
         }
-        docson.doc("doc", schema);
+        docson.doc("doc", schema, "/Invoice");
     });
 </script>
 </body>
