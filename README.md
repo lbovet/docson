@@ -16,6 +16,5 @@ Features:
 
 Not implemented:
 * Reference to remote schemas
-* Dependencies
-* Enum with non-primitive values
-* Non-primitive default values
+* Non-primitive values in enums and default values
+* dependencies, additonalItems, patternProperties
