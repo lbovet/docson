@@ -30,9 +30,9 @@
     -webkit-border-radius: 6px;
     margin-top: 2px;
     padding-bottom: 10px;
-    -moz-box-shadow:    2px 2px 2px darkgray;
-    -webkit-box-shadow: 2px 2px 2px darkgray;
-    box-shadow:         2px 2px 2px darkgray;
+    -moz-box-shadow:    1px 1px 1px darkgray;
+    -webkit-box-shadow: 1px 1px 1px darkgray;
+    box-shadow:         1px 1px 1px darkgray;
 }
 
 .expand-button {
@@ -68,9 +68,9 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom: 1px solid lightgrey;
-    background: gainsboro;
-    background: -webkit-linear-gradient(ghostwhite, gainsboro, gainsboro, lightgrey);
-    background: -moz-linear-gradient(ghostwhite, gainsboro, gainsboro, lightgrey);
+    background: whitesmoke;
+    background: -webkit-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
+    background: -moz-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
 }
 
 .box-name {
@@ -105,52 +105,51 @@
 }
 
 .box-1 {
-    background: gainsboro;
-    background: -webkit-linear-gradient(ghostwhite, gainsboro, gainsboro, lightgrey);
-    background: -moz-linear-gradient(ghostwhite, gainsboro, gainsboro, lightgrey);
-
+    background: whitesmoke;
+    background: -webkit-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
+    background: -moz-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
 }
 
 .box-2 {
     background: beige;
-    background: -webkit-linear-gradient(white, beige, beige, lightgrey);
-    background: -moz-linear-gradient(white, beige, beige, lightgrey);
+    background: -webkit-linear-gradient(white, beige, beige, gainsboro);
+    background: -moz-linear-gradient(white, beige, beige, gainsboro);
 }
 
 .box-3 {
     background: azure;
-    background: -webkit-linear-gradient(white, azure, azure, lightgrey);
-    background: -moz-linear-gradient(white, azure, azure, lightgrey);
+    background: -webkit-linear-gradient(white, azure, azure, gainsboro);
+    background: -moz-linear-gradient(white, azure, azure, gainsboro);
 }
 
 .box-4 {
     background: mistyrose;
-    background: -webkit-linear-gradient(white, mistyrose, mistyrose, lightgrey);
-    background: -moz-linear-gradient(white, mistyrose, mistyrose, lightgrey);
+    background: -webkit-linear-gradient(white, mistyrose, mistyrose, gainsboro);
+    background: -moz-linear-gradient(white, mistyrose, mistyrose, gainsboro);
 }
 
 .box-5 {
     background: #ddffee;
-    background: -webkit-linear-gradient(white, #ddffee, #ddffee, lightgrey);
-    background: -moz-linear-gradient(white, #ddffee, #ddffee, lightgrey);
+    background: -webkit-linear-gradient(white, #ddffee, #ddffee, gainsboro);
+    background: -moz-linear-gradient(white, #ddffee, #ddffee, gainsboro);
 }
 
 .box-6 {
     background: ghostwhite;
-    background: -webkit-linear-gradient(white, ghostwhite, ghostwhite, lightgrey);
-    background: -moz-linear-gradient(white, ghostwhite, ghostwhite, lightgrey);
+    background: -webkit-linear-gradient(white, ghostwhite, ghostwhite, gainsboro);
+    background: -moz-linear-gradient(white, ghostwhite, ghostwhite, gainsboro);
 }
 
 .box-7 {
     background: lavenderblush;
-    background: -webkit-linear-gradient(white, lavenderblush, lavenderblush, lightgrey);
-    background: -moz-linear-gradient(white, lavenderblush, lavenderblush, lightgrey);
+    background: -webkit-linear-gradient(white, lavenderblush, lavenderblush, gainsboro);
+    background: -moz-linear-gradient(white, lavenderblush, lavenderblush, gainsboro);
 }
 
 .box-8 {
     background: aliceblue;
-    background: -webkit-linear-gradient(white, aliceblue, aliceblue, lightgrey);
-    background: -moz-linear-gradient(white, aliceblue, aliceblue, lightgrey);
+    background: -webkit-linear-gradient(white, aliceblue, aliceblue, gainsboro);
+    background: -moz-linear-gradient(white, aliceblue, aliceblue, gainsboro);
 }
 
 .signature {
@@ -262,10 +261,10 @@
 }
 
 .signature-type-expanded {
-    opacity: 0.5;
-    -moz-box-shadow:    inset 2px 2px 2px darkgray;
-    -webkit-box-shadow: inset 2px 2px 2px darkgray;
-    box-shadow:         inset 2px 2px 2px darkgray;
+    opacity: 0.6;
+    -moz-box-shadow:    inset 1px 1px 1px darkgray;
+    -webkit-box-shadow: inset 1px 1px 1px darkgray;
+    box-shadow:         inset 1px 1px 1px darkgray;
 }
 
 .signature-description {
@@ -282,7 +281,7 @@
 
 .box-container {
     float: left;
-    padding-top: 3px;
+    padding-top: 6px;
     padding-left: 8px;
     display: none;
 }

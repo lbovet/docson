@@ -47,16 +47,15 @@ $(function() {
     Handlebars.registerHelper('source', function(schema) {
         delete schema.root;
         delete schema.__boxId;
+        delete schema.__name;
         return JSON.stringify(schema, null, 2);
     });
 
     Handlebars.registerHelper('desc', function(schema) {
-        var title = schema.title;
         var description = schema.description;
 
-        if( !title && !description ) return "";
-        var text = title ? title : "";
-        text = text + (description ? (title ? "\n"+description: description) : "");
+        if( !description ) return "";
+        var text = description;
         text = text.replace("\n", "\n\n").trim();
         var markdown = exports.Markdown;
         if(markdown) {
@@ -94,7 +93,6 @@ $(function() {
             value = value === true ? "true": value;
             value = value === false ? "false": value;
             value = typeof value === "object" ? JSON.stringify(value): value;
-            console.log(value);
             this.__default = value;
             var result = options.fn(this);
             delete this.__default;
@@ -236,23 +234,24 @@ $(function() {
         }
         var name = schema.title;
         name = !name && schema.id ? schema.id: name;
+        name = !name ? schema.__name: name;
         return name;
     }
 
-    Handlebars.registerHelper('name', function(schema) {
-        return getName(schema);
+    Handlebars.registerHelper('name', function(schema, options) {
+        schema.__name = getName(schema);
+        if(schema.__name) {
+            return options.fn(schema);
+        }
     });
 
     var refName = function(ref) {
-        var name = ref;
-        if(ref.indexOf("#") != -1) {
-            name = getName(resolvePointerRef(ref));
-            if(!name) {
-                if(ref == "#") {
-                    name = "<root>";
-                } else {
-                    name = ref.replace("#", "/")
-                }
+        var name = getName(resolveRef(ref));
+        if(!name) {
+            if(ref == "#") {
+                name = "<root>";
+            } else {
+                name = ref.replace("#", "/")
             }
         }
         var segments = name.split("/");
@@ -274,11 +273,11 @@ $(function() {
             if(target) {
                 target.__name = refName(schema.$ref);
             }
-            var result = options.fn(target);
             if(target) {
-                delete target.__name;
+                return options.fn(target);
+            } else {
+                return new Handlebars.SafeString("<span class='error'>Error: Could not resolve schema <em>"+schema.$ref+"</em></span>");
             }
-            return result;
         }
     });
 
@@ -318,6 +317,7 @@ $(function() {
             }
             var target = schema;
             if(ref) {
+                ref = ref[0] !== '/' ? '/'+ref : ref;
                 target = jsonpointer.get(schema, ref);
                 stack.push( schema );
             }

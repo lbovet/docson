@@ -18,20 +18,21 @@
 </head>
 <body>
 <script charset="utf-8">
-    var tests = ["enum", "schema","additionalProperties", "address", "fstab", "basic", "not", "oneOf", "anyOf", "allOf", "example2", "properties", "ref"]
+    var tests = [ "invoice$Invoice", "enum", "schema","additionalProperties", "address", "fstab", "basic", "not", "oneOf", "anyOf", "allOf", "example2", "properties", "ref"]
     $(function() {
         $.each(tests, function(k, test) {
             var block = $("<div/>");
-            $("body").append("<h2>"+test+"</h2>");
+            var segments = test.split("$");
+            $("body").append("<h2>"+segments[0]+"</h2>");
             $("body").append(block);
-            $.get("tests/"+test+".json").done(function(items) {
+            $.get("tests/"+segments[0]+".json").done(function(items) {
                 $.each(items, function(k, item) {
                     var element = $("<div/>");
                     block.append(element);
                     if(!item.schema.description) {
                         item.schema.description = item.description;
                     }
-                    docson.doc(element, item.schema);
+                    docson.doc(element, item.schema, segments[1]);
                 });
             });
         });
