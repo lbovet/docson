@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// Docson 0.1
-
 var docson = docson || {};
 var exports = exports || {};
 

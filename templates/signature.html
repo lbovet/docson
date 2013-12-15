@@ -21,7 +21,7 @@
                 {{__type}}
             </span>
             <span class="type-keyword">
-                {{range minLength maxLength 0 "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
+                {{range minLength maxLength "" "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
             </span>
         {{/simple}}
         {{#complex this}}
@@ -55,7 +55,7 @@
                {{__type}}
             </span>
             <span class="type-keyword">
-               {{range minLength maxLength 0 "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
+               {{range minLength maxLength "" "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
             </span>
             {{#if pattern}}
                 <span class="type-pattern">/{{pattern}}/</span>
