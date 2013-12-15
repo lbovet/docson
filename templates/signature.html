@@ -14,11 +14,15 @@
  limitations under the License.
 }}
 {{#if keyword}}
-    <span class="type-keyword">{{keyword}}{{range schema.minItems schema.maxItems 0 "∞" false false ".."}}</span>
+    <span class="type-keyword">{{keyword}}{{range schema.minItems schema.maxItems 0 "" false false ".."}}</span>
     {{#each schemas}}
         {{#simple this}}
             <span class="signature-type-{{__type}}">
-                {{__type}}{{range minLength maxLength 0 "∞" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}</span>
+                {{__type}}
+            </span>
+            <span class="type-keyword">
+                {{range minLength maxLength 0 "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
+            </span>
         {{/simple}}
         {{#complex this}}
             {{#box this}}
@@ -30,13 +34,29 @@
                 <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-ref signature-button signature-type-expandable button">{{__name}}</span>
             {{/box}}
         {{/ref}}
+        {{#if pattern}}
+            <span class="type-pattern">/{{pattern}}/</span>
+        {{/if}}
+        {{#if enum}}
+            {{#each enum}}
+                <span class="type-enum">{{this}}</span>
+            {{/each}}
+        {{/if}}
+        {{#exists default}}
+            <span class="type-keyword">default</span>
+            <span class="type-default">{{__default}}</span>
+        {{/exists}}
     {{/each}}
 {{/if}}
 {{#unless keyword}}
     {{#each schemas}}
-        {{#primitive type}}
+        {{#primitive this}}
            <span class="signature-type-{{__type}}">
-               {{__type}}{{range minLength maxLength 0 "∞" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}</span>
+               {{__type}}
+            </span>
+            <span class="type-keyword">
+               {{range minLength maxLength 0 "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
+            </span>
             {{#if pattern}}
                 <span class="type-pattern">/{{pattern}}/</span>
             {{/if}}
@@ -51,5 +71,17 @@
                 <span boxid="{{boxId}}" class="box-{{boxId}} signature-type-{{__type}} signature-button signature-type-expandable button">{{__type}}</span>
             {{/box}}
         {{/obj}}
+        {{#if pattern}}
+            <span class="type-pattern">/{{pattern}}/</span>
+        {{/if}}
+        {{#if enum}}
+            {{#each enum}}
+                <span class="type-enum">{{this}}</span>
+            {{/each}}
+        {{/if}}
+        {{#exists default}}
+            <span class="type-keyword">default</span>
+            <span class="type-default">{{__default}}</span>
+        {{/exists}}
     {{/each}}
 {{/unless}}

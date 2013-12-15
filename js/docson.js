@@ -82,15 +82,23 @@ $(function() {
         }
     });
 
-    Handlebars.registerHelper('primitive', function(type, options) {
-        if(type && type != "object" && type != "array") {
-            return withType(this, options)
+    Handlebars.registerHelper('primitive', function(schema, options) {
+        if(schema.type && schema.type != "object" && schema.type != "array" || schema.enum) {
+            return withType(this, options, true)
         }
     });
 
     Handlebars.registerHelper('exists', function(value, options) {
         if(value !== undefined) {
-            return options.fn(this);
+            value = value === null ? "null": value;
+            value = value === true ? "true": value;
+            value = value === false ? "false": value;
+            value = typeof value === "object" ? JSON.stringify(value): value;
+            console.log(value);
+            this.__default = value;
+            var result = options.fn(this);
+            delete this.__default;
+            return result;
         }
     });
 
@@ -109,11 +117,11 @@ $(function() {
     });
 
     var sub = function(schema) {
-        return schema.type == "array" || schema.allOf || schema.anyOf || schema.oneOf || schema.not || schema.enum || schema.additionalProperties;
+        return schema.type == "array" || schema.allOf || schema.anyOf || schema.oneOf || schema.not || schema.additionalProperties;
     }
 
     Handlebars.registerHelper('sub', function(schema, options) {
-        if(sub(schema)) {
+        if(sub(schema) || (schema.type && schema.type != "object" && schema.type != "array") || schema.enum) {
             return options.fn(this);
         }
     });
@@ -132,13 +140,13 @@ $(function() {
 
     Handlebars.registerHelper('simple', function(schema, options) {
         if(simpleSchema(schema) && !schema.$ref) {
-            return withType(schema, options);
+            return withType(schema, options, true);
         }
     });
 
-    var withType = function(schema, options) {
+    var withType = function(schema, options, hideAny) {
         schema.__type = schema.type;
-        if(!schema.type) {
+        if(!schema.type && !hideAny) {
             schema.__type="any";
         }
         if(schema.format) {
@@ -255,6 +263,8 @@ $(function() {
     function renderSchema(schema) {
         if(stack.indexOf(schema) == -1) { // avoid recursion
             return new Handlebars.SafeString(boxTemplate(schema));
+        } else {
+            return new Handlebars.SafeString(boxTemplate({"description": "_circular reference_"}));
         }
     }
 
@@ -315,14 +325,20 @@ $(function() {
                     highlight.highlightSchema(schemaElement);
                 });
             }
-
+            element.find(".box").mouseenter(function() {
+                $(this).children(".source-button").fadeIn(300);
+                $(this).children(".box-body").children(".expand-button").fadeIn(300);
+            });
+            element.find(".box").mouseleave(function() {
+                $(this).children(".source-button").fadeOut(300);
+                $(this).children(".box-body").children(".expand-button").fadeOut(300);
+            });
             element.find(".signature-type-expandable").click(function() {
                 var boxId = $(this).attr("boxid");
-                console.log(boxId);
                 $(this).toggleClass("signature-type-expanded");
                 $(this).parent().parent().parent().children(".signature-box-container").children("[boxid='"+boxId+"']").toggle(300);
             });
-            element.find(".expand").click(function() {
+            element.find(".expand-button").click(function() {
                 if(this.expanded) {
                     $(this).html(" + ").attr("title", "Expand all");                
                     $(this).parent().parent().find(".signature-type-expandable").removeClass("signature-type-expanded");
@@ -336,8 +352,8 @@ $(function() {
                 }
             });
             element.find(".source-button").click(function() {
-                $(this).parent().parent().children(".box-body").toggle();
-                $(this).parent().parent().children(".source").toggle();
+                $(this).parent().children(".box-body").toggle();
+                $(this).parent().children(".source").toggle();
             });
         })
     }

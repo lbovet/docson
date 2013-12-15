@@ -21,6 +21,7 @@
 }
 
 .box {
+    position: relative;
     float: left;
     background: white;
     border: 1px solid lightgrey;
@@ -30,38 +31,39 @@
     padding-bottom: 10px;
 }
 
-.expand {
-    float: right;
+.expand-button {
+    position: absolute;
+    margin-top: 12px;
     right: 2px;
-    margin-right: -10px;
-    margin-bottom: -10px;
+    float: right;
     width: 18px;
     text-align: center;
     cursor: pointer;
     font-weight: bold;
     font-size: 120%;
-    color: lightgrey;
+    color: darkgray;
+    display: none;
 }
 
 .source-button {
-    float: right;
+    position: absolute;
+    margin-top: 3px;
     right: 2px;
     width: 18px;
     text-align: center;
-    margin-left: 3px;
-    margin-right: -2px;
     cursor: pointer;
     font-weight: bold;
     font-family: monospace;
     font-size: 70%;
     color: darkgray;
+    display: none;
 }
 
 .box-header {
     padding: 6px;
     background: gainsboro;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     border-bottom: 1px solid lightgrey;
 }
 
@@ -91,9 +93,8 @@
 }
 
 .box-body {
-    padding-top: 8px;
     padding-left: 10px;
-    padding-right: 14px;
+    padding-right: 20px;
     clear: both;
 }
 
@@ -155,8 +156,8 @@
 }
 
 .type-pattern {
-    font-size: 80%;
-    color: green;
+    font-size: 70%;
+    color: darkgreen;
 }
 
 .type-enum {
@@ -194,6 +195,35 @@
 
 .signature-type-boolean {
     color: orangered;
+}
+
+.signature-type-null {
+    font-family: monospace;
+    color: red;
+}
+
+.signature-type-date-time {
+    color: #224466;
+}
+
+.signature-type-email {
+    color: cornflowerblue;
+}
+
+.signature-type-hostname {
+    color: darkolivegreen;
+}
+
+.signature-type-ipv6 {
+    color: darkslateblue;
+}
+
+.signature-type-ipv4 {
+    color: indigo;
+}
+
+.signature-type-uri {
+    color: saddlebrown;
 }
 
 .signature-button {
