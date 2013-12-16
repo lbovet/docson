@@ -57,9 +57,6 @@
             <span class="type-keyword">
                {{range minLength maxLength "" "" false false ".."}}{{range minimum maximum "-∞" "∞" exclusiveMinimum exclusiveMaximum ";"}}
             </span>
-            {{#if pattern}}
-                <span class="type-pattern">/{{pattern}}/</span>
-            {{/if}}
         {{/primitive}}
         {{#ref this}}
             {{#box this}}
