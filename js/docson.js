@@ -53,7 +53,6 @@ $(function() {
 
         if( !description ) return "";
         var text = description;
-        //text = text.replace("\n", "\n\n").trim();
         if(marked) {
             marked.setOptions({gfm: true, breaks: true})
             return new Handlebars.SafeString(marked(text));
