@@ -15,7 +15,6 @@
  */
 
 var docson = docson || {};
-var exports = exports || {};
 
 docson.templateBaseUrl="templates";
 
@@ -54,10 +53,10 @@ $(function() {
 
         if( !description ) return "";
         var text = description;
-        text = text.replace("\n", "\n\n").trim();
-        var markdown = exports.Markdown;
-        if(markdown) {
-            return new Handlebars.SafeString(markdown.toHTML(text));
+        //text = text.replace("\n", "\n\n").trim();
+        if(marked) {
+            marked.setOptions({gfm: true, breaks: true})
+            return new Handlebars.SafeString(marked(text));
         } else {
             return text;
         }
