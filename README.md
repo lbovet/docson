@@ -18,3 +18,7 @@ Not implemented:
 * Reference to remote schemas
 * Non-primitive values in enums and default values
 * dependencies, additionalItems, patternProperties
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/lbovet/docson/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
