@@ -15,7 +15,6 @@ Features:
 * Render schema descriptions with markdown
 
 Not implemented:
-* Reference to remote schemas
 * Non-primitive values in enums and default values
 * dependencies, additionalItems, patternProperties
 

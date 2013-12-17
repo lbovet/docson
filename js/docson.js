@@ -204,12 +204,12 @@ $(function() {
     }
 
     var resolvePointerRef = function(ref) {
-        var root = stack[0];
+        var root = stack[1];
         if(ref=="#") {
             return root;
         }
         try {
-            return jsonpointer.get(stack[0], ref);
+            return jsonpointer.get(stack[1], ref);
         } catch(e) {
             console.log(e);
             return null;
@@ -217,7 +217,7 @@ $(function() {
     }
 
     var resolveRef = function(ref) {
-        if(ref.indexOf("#") != -1) {
+        if(ref.indexOf("#") == 0) {
             return resolvePointerRef(ref);
         } else {
             return resolveIdRef(ref);
@@ -311,56 +311,85 @@ $(function() {
             if(typeof schema == "string") {
                 schema = JSON.parse(schema);
             }
-            var target = schema;
-            if(ref) {
-                ref = ref[0] !== '/' ? '/'+ref : ref;
-                target = jsonpointer.get(schema, ref);
-                stack.push( schema );
-            }
 
-            target.root = true;
-            var html = boxTemplate(target);
+            var refsPromise = $.Deferred().resolve().promise();
+            var refs = {};
 
-            if(ref) {
-                stack.pop();
-            }
-
-            element.addClass("docson").html(html);
-
-            if(highlight) {
-                element.find(".json-schema").each(function(k, schemaElement) {
-                    highlight.highlightSchema(schemaElement);
-                });
-            }
-            element.find(".box").mouseenter(function() {
-                $(this).children(".source-button").fadeIn(300);
-                $(this).children(".box-body").children(".expand-button").fadeIn(300);
-            });
-            element.find(".box").mouseleave(function() {
-                $(this).children(".source-button").fadeOut(300);
-                $(this).children(".box-body").children(".expand-button").fadeOut(300);
-            });
-            element.find(".signature-type-expandable").click(function() {
-                var boxId = $(this).attr("boxid");
-                $(this).toggleClass("signature-type-expanded");
-                $(this).parent().parent().parent().children(".signature-box-container").children("[boxid='"+boxId+"']").toggle(300);
-            });
-            element.find(".expand-button").click(function() {
-                if(this.expanded) {
-                    $(this).html(" + ").attr("title", "Expand all");                
-                    $(this).parent().parent().find(".signature-type-expandable").removeClass("signature-type-expanded");
-                    $(this).parent().parent().find(".box-container").hide(300);
-                    this.expanded=false;
-                } else {
-                    $(this).html(" - ").attr("title", "Collapse all");
-                    $(this).parent().parent().find(".signature-type-expandable").addClass("signature-type-expanded");
-                    $(this).parent().parent().find(".box-container").show(300);
-                    this.expanded=true;
+            traverse(schema).forEach(function(item) {
+                if(this.key === "$ref") {
+                    if((/^https?:\/\//).test(item)) {
+                        var segments = item.split("#");
+                        var p = $.get(segments[0]).then(function(content) {
+                            if(typeof content != "object") {
+                                try {
+                                    content = JSON.parse(content);
+                                } catch(e) {
+                                    console.error("Unable to parse "+segments[0], e);
+                                }
+                            }
+                            if(content) {
+                                refs[item] = content;
+                            }
+                        });
+                        refsPromise = p.then(refsPromise)
+                    }
                 }
             });
-            element.find(".source-button").click(function() {
-                $(this).parent().children(".box-body").toggle();
-                $(this).parent().children(".source").toggle();
+
+            refsPromise.done(function() {
+                stack.push(refs);
+                var target = schema;
+                if(ref) {
+                    ref = ref[0] !== '/' ? '/'+ref : ref;
+                    target = jsonpointer.get(schema, ref);
+                    stack.push( schema );
+                }
+
+                target.root = true;
+                var html = boxTemplate(target);
+
+                if(ref) {
+                    stack.pop();
+                }
+                stack.pop();
+
+                element.addClass("docson").html(html);
+
+                if(highlight) {
+                    element.find(".json-schema").each(function(k, schemaElement) {
+                        highlight.highlightSchema(schemaElement);
+                    });
+                }
+                element.find(".box").mouseenter(function() {
+                    $(this).children(".source-button").fadeIn(300);
+                    $(this).children(".box-body").children(".expand-button").fadeIn(300);
+                });
+                element.find(".box").mouseleave(function() {
+                    $(this).children(".source-button").fadeOut(300);
+                    $(this).children(".box-body").children(".expand-button").fadeOut(300);
+                });
+                element.find(".signature-type-expandable").click(function() {
+                    var boxId = $(this).attr("boxid");
+                    $(this).toggleClass("signature-type-expanded");
+                    $(this).parent().parent().parent().children(".signature-box-container").children("[boxid='"+boxId+"']").toggle(300);
+                });
+                element.find(".expand-button").click(function() {
+                    if(this.expanded) {
+                        $(this).html(" + ").attr("title", "Expand all");
+                        $(this).parent().parent().find(".signature-type-expandable").removeClass("signature-type-expanded");
+                        $(this).parent().parent().find(".box-container").hide(300);
+                        this.expanded=false;
+                    } else {
+                        $(this).html(" - ").attr("title", "Collapse all");
+                        $(this).parent().parent().find(".signature-type-expandable").addClass("signature-type-expanded");
+                        $(this).parent().parent().find(".box-container").show(300);
+                        this.expanded=true;
+                    }
+                });
+                element.find(".source-button").click(function() {
+                    $(this).parent().children(".box-body").toggle();
+                    $(this).parent().children(".source").toggle();
+                });
             });
         })
     }
