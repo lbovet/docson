@@ -3,7 +3,7 @@ Docson
 
 Documentation for your JSON types.
 
-Give Docson a JSON schema and it will generate a beautiful documentation.
+Give Docson a JSON schema and it will generate a [beautiful documentation](http://lbovet.github.io/docson/index.html#/docson/example.json).
 
 ## Features
 * [JSON schema](http://json-schema.org/) v4 keywords.
