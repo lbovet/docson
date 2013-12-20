@@ -45,7 +45,7 @@
             function update() {
                 if (window.location.hash) {
                     $("#form").hide();
-                    url = window.location.hash.substring(1);
+                    url = decodeURI(window.location.hash.substring(1));
                     var segments = url.split("$");
                     $.get(segments[0])
                             .done(function (schema) {
