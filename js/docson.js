@@ -355,6 +355,15 @@ $(function() {
 
                 element.addClass("docson").html(html);
 
+                var resizeHandler = element.get(0).onresize;
+                function resized() {
+                    if(resizeHandler) {
+                        var box = element.find(".box").first();
+                        element.get(0).onresize(box.outerHeight());
+                    }
+                }
+                resized();
+
                 if(highlight) {
                     element.find(".json-schema").each(function(k, schemaElement) {
                         highlight.highlightSchema(schemaElement);
@@ -371,24 +380,29 @@ $(function() {
                 element.find(".signature-type-expandable").click(function() {
                     var boxId = $(this).attr("boxid");
                     $(this).toggleClass("signature-type-expanded");
-                    $(this).parent().parent().parent().children(".signature-box-container").children("[boxid='"+boxId+"']").toggle(300);
+                    $(this).parent().parent().parent().children(".signature-box-container").
+                        children("[boxid='"+boxId+"']").toggle(resizeHandler ? 0 : 300);
+                    resized();
                 });
                 element.find(".expand-button").click(function() {
                     if(this.expanded) {
                         $(this).html(" + ").attr("title", "Expand all");
                         $(this).parent().parent().find(".signature-type-expandable").removeClass("signature-type-expanded");
-                        $(this).parent().parent().find(".box-container").hide(300);
+                        $(this).parent().parent().find(".box-container").hide( resizeHandler ? 0 : 300);
                         this.expanded=false;
+                        resized();
                     } else {
                         $(this).html(" - ").attr("title", "Collapse all");
                         $(this).parent().parent().find(".signature-type-expandable").addClass("signature-type-expanded");
-                        $(this).parent().parent().find(".box-container").show(300);
+                        $(this).parent().parent().find(".box-container").show(resizeHandler ? 0 : 300);
                         this.expanded=true;
+                        resized();
                     }
                 });
                 element.find(".source-button").click(function() {
                     $(this).parent().children(".box-body").toggle();
                     $(this).parent().children(".source").toggle();
+                    resized();
                 });
             });
         })
