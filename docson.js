@@ -18,7 +18,7 @@ var docson = docson || {};
 
 docson.templateBaseUrl="templates";
 
-$(function() {
+define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib/marked", "lib/traverse"], function(jquery, handlebars, highlight, jsonpointer, marked) {
 
     var ready = $.Deferred();
     var boxTemplate;
@@ -410,4 +410,6 @@ $(function() {
             });
         })
     }
+
+    return docson;
 });
