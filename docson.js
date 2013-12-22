@@ -306,6 +306,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
     };
 
     docson.doc = function(element, schema, ref) {
+        var d = $.Deferred();
         init();
         ready.done(function() {
             if(typeof element == "string") {
@@ -408,7 +409,9 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                     resized();
                 });
             });
+            d.resolve();
         })
+        return d.promise();
     }
 
     return docson;
