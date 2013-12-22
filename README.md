@@ -21,6 +21,14 @@ Give Docson a JSON schema and it will generate a [beautiful documentation](http:
 
 Note that you can refer to a sub-schema by adding a json-pointer path as 'dollar-parameter': [index.html#/docson/examples/example.json$items](http://lbovet.github.io/docson/index.html#/docson/examples/example.json$items)
 
+## Typson
+
+You can directly reference your JSON types defined as TypeScript interfaces. If the path ends with '.ts', Docson will use [Typson](https://github.com/lbovet/typson) to convert the Type Scripts to schema in order to generate the documentation.
+
+For example, [index.html#/typson/example/invoice/line.ts$InvoiceLine](http://lbovet.github.io/docson/index.html#/typson/example/invoice/line.ts$InvoiceLine) is the documentation of [line.ts](https://github.com/lbovet/typson/blob/master/example/invoice/line.ts).
+
+[Typson](https://github.com/lbovet/typson) must be located at the same level as the `docson` directory on your server. Keep its directory named `typson`.
+
 ## Widget
 
 To include a Docson schema documentations on any page (wiki, ...) without worrying about messing up with javascript libraries and cross-origin issues:
