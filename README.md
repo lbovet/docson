@@ -3,7 +3,7 @@ Docson
 
 Documentation for your JSON types.
 
-Give Docson a JSON schema and it will generate a [beautiful documentation](http://lbovet.github.io/docson/index.html#/docson/example.json).
+Give Docson a JSON schema and it will generate a [beautiful documentation](http://lbovet.github.io/docson/index.html#/docson/examples/example.json).
 
 ## Features
 * [JSON schema](http://json-schema.org/) v4 keywords.
@@ -17,9 +17,9 @@ Give Docson a JSON schema and it will generate a [beautiful documentation](http:
 ## Usage
 
 * Open [index.html](http://lbovet.github.io/docson/index.html) and enter the schema path in the form field.
-* Or give the schema path directly as hash parameter: [index.html#/docson/example.json](http://lbovet.github.io/docson/index.html#/docson/example.json)
+* Or give the schema path directly as hash parameter: [index.html#/docson/examples/example.json](http://lbovet.github.io/docson/index.html#/docson/examples/example.json)
 
-Note that you can refer to a sub-schema by adding a json-pointer path as 'dollar-parameter': [index.html#/docson/example.json$items](http://lbovet.github.io/docson/index.html#/docson/example.json$items)
+Note that you can refer to a sub-schema by adding a json-pointer path as 'dollar-parameter': [index.html#/docson/examples/example.json$items](http://lbovet.github.io/docson/index.html#/docson/examples/example.json$items)
 
 ## Widget
 
@@ -29,11 +29,11 @@ To include a Docson schema documentations on any page (wiki, ...) without worryi
 * Place the following `script` tags in the including page, nothing else is needed:
 
 ```
-<script src="http://somewhere/path-to-docson/js/docson-widget.js" data-schema="/path-to-schema">
+<script src="http://somewhere/path-to-docson/widget.js" data-schema="/path-to-schema">
 </script>
 ```
 
-See the [widget example](http://jsfiddle.net/3kXu2/) on jsfiddle.
+See the [widget example](http://jsfiddle.net/3kXu2/3/) on jsfiddle.
 
 ## Integration
 
@@ -48,7 +48,7 @@ docson.doc(element, schema, ref)
 * `ref` is an optional json-pointer path to a sub-schema.
 
 Examples:
-* [Simple integration example](http://lbovet.github.io/docson/example.html)
+* [Simple integration example](http://lbovet.github.io/docson/examples/example.html)
 * [See it in action](http://lbovet.github.io/typson-demo/) with its buddy [typson](https://github.com/lbovet/typson).
 
 ## Limitations

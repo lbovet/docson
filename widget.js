@@ -21,7 +21,7 @@ var docson;
 if (script.attributes["data-docson"]) {
     docson = script.attributes["data-docson"].value;
 } else {
-    docson = script.src.replace("js/docson-widget.js", "index.html");
+    docson = script.src.replace("widget.js", "index.html");
 }
 if (!script.attributes["data-schema"]) {
     document.write("<p style='color:red'>Missing data-schema (url to schema)</p>")

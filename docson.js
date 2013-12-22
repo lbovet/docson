@@ -293,17 +293,20 @@ $(function() {
         console.log(context);
     });
 
-    $.when( $.get(docson.templateBaseUrl+"/box.html").done(function(content) {
-        source = content
-        boxTemplate = Handlebars.compile(source);
-    }), $.get(docson.templateBaseUrl+"/signature.html").done(function(content) {
-        source = content
-        signatureTemplate = Handlebars.compile(source);
-    })).always(function() {
-        ready.resolve();
-    });
+    function init() {
+        $.when( $.get(docson.templateBaseUrl+"/box.html").done(function(content) {
+            source = content
+            boxTemplate = Handlebars.compile(source);
+        }), $.get(docson.templateBaseUrl+"/signature.html").done(function(content) {
+            source = content
+            signatureTemplate = Handlebars.compile(source);
+        })).always(function() {
+            ready.resolve();
+        });
+    };
 
     docson.doc = function(element, schema, ref) {
+        init();
         ready.done(function() {
             if(typeof element == "string") {
                 element = $("#"+element);
