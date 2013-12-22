@@ -27,7 +27,7 @@ You can directly reference your JSON types defined as TypeScript interfaces. If 
 
 For example, [index.html#/typson/example/invoice/line.ts$InvoiceLine](http://lbovet.github.io/docson/index.html#/typson/example/invoice/line.ts$InvoiceLine) is the documentation of [line.ts](https://github.com/lbovet/typson/blob/master/example/invoice/line.ts).
 
-You need to install [Typson](https://github.com/lbovet/typson) by yourself on your server. It must be in a directory named `typson` located at the same level as the `docson` directory on your server.
+You need to install [Typson](https://github.com/lbovet/typson) by yourself on your server. It must be in a directory named `typson` located at the same level as the `docson` directory.
 
 ## Widget
 
