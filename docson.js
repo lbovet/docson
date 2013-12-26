@@ -366,6 +366,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                         element.get(0).onresize(box.outerHeight());
                     }
                 }
+                element.get(0).resized = resized;
                 resized();
 
                 if(highlight) {

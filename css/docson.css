@@ -15,7 +15,7 @@
  */
 
 .docson {
-    font-family: verdana,helvetica;
+    font-family: 'Droid Sans',verdana,helvetica;
     font-size: 14px;
     padding: 6px 6px 6px 6px;
 }
@@ -23,7 +23,7 @@
 .box {
     position: relative;
     float: left;
-    background: white;
+    background-color:rgba(255, 255, 255, 0.2);
     border: 1px solid lightgrey;
     border-radius: 6px;
     -moz-border-radius: 6px;
@@ -44,6 +44,7 @@
     text-align: center;
     cursor: pointer;
     font-weight: bold;
+    font-family: monospace;
     font-size: 120%;
     color: darkgray;
     display: none;
@@ -160,6 +161,7 @@
 .signature-header {
     padding-top: 3px;
     height: 20px;
+    line-height: 22px;
 }
 
 .property-name {
