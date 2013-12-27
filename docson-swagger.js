@@ -58,7 +58,6 @@ SwaggerOperation.prototype.getSignature = function(type, models) {
 
 $(document).on("click", ".toggleOperation", function() {
     $(this).parents(".operations").find(".docson-frame").each(function(k, frame) {
-        console.log(frame)
         frame.contentWindow.postMessage({id: "docson", action: "resize"}, "*");
     });
 });
