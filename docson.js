@@ -363,7 +363,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 function resized() {
                     if(resizeHandler) {
                         var box = element.find(".box").first();
-                        element.get(0).onresize(box.outerHeight());
+                        element.get(0).onresize(box.outerWidth(), box.outerHeight());
                     }
                 }
                 element.get(0).resized = resized;

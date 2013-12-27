@@ -24,12 +24,14 @@ function createDoc(definitions, type) {
         allDefinitions = {};
         function receiveMessage(event) {
             if (event.data.id && event.data.id == "docson") {
-                var frame = $("#docson-"+event.data.url.split("$")[2]).get(0);
+                var frame = $("#docson-"+event.data.url.split("$")[2]);
                 if (event.data.action == "resized") {
-                    frame.height = event.data.height + 18;
+                    frame.get(0).width = event.data.width + 18;
+                    frame.get(0).height = event.data.height + 32;
+                    frame.parents("td").width(event.data.width + 32)
                 }
                 if (event.data.action == "ready") {
-                    frame.contentWindow.postMessage({ id: "docson", action: "load", definitions: allDefinitions, type: event.data.url.split("$")[1]}, "*");
+                    frame.get(0).contentWindow.postMessage({ id: "docson", action: "load", definitions: allDefinitions, type: event.data.url.split("$")[1]}, "*");
                 }
             }
         }

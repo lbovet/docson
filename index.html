@@ -95,8 +95,8 @@
 
                 var doc = $('#doc').get(0);
                 if(embedded) {
-                    doc.onresize =  function(height) {
-                        window.parent.postMessage( { id: "docson", action: "resized", url: url, height: height}, "*");
+                    doc.onresize =  function(width, height) {
+                        window.parent.postMessage( { id: "docson", action: "resized", url: url, width: width, height: height}, "*");
                     }
                 }
             });
