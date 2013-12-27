@@ -16,7 +16,7 @@
 
 .docson {
     font-family: 'Droid Sans',verdana,helvetica;
-    font-size: 14px;
+    font-size: 13px;
     padding: 6px 6px 6px 6px;
 }
 
@@ -28,7 +28,6 @@
     border-radius: 6px;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
-    margin-top: 2px;
     padding-bottom: 10px;
     -moz-box-shadow:    1px 1px 1px darkgray;
     -webkit-box-shadow: 1px 1px 1px darkgray;
@@ -37,7 +36,8 @@
 
 .expand-button {
     position: absolute;
-    margin-top: 12px;
+    margin-top: 15px;
+    padding: 2px;
     right: 2px;
     float: right;
     width: 18px;
@@ -45,13 +45,14 @@
     cursor: pointer;
     font-weight: bold;
     font-family: monospace;
-    font-size: 120%;
+    font-size: 15px;
     color: darkgray;
     display: none;
 }
 
 .source-button {
     position: absolute;
+    padding: 2px;
     margin-top: 3px;
     right: 2px;
     width: 18px;
@@ -59,7 +60,7 @@
     cursor: pointer;
     font-weight: bold;
     font-family: monospace;
-    font-size: 70%;
+    font-size: 10px;
     color: darkgray;
     display: none;
 }
@@ -101,7 +102,7 @@
 
 .box-body {
     padding-left: 10px;
-    padding-right: 20px;
+    padding-right: 28px;
     clear: both;
 }
 
@@ -154,14 +155,14 @@
 }
 
 .signature {
-    padding-top: 12px;
+    padding-top: 5px;
     clear: left;
 }
 
 .signature-header {
     padding-top: 3px;
     height: 20px;
-    line-height: 22px;
+    line-height: 24px;
 }
 
 .property-name {
@@ -179,9 +180,17 @@
     color: dimgray;
 }
 
+.type-keyword:hover {
+    font-size: 100%;
+}
+
 .type-pattern {
-    font-size: 70%;
+    font-size: 80%;
     color: darkolivegreen;
+}
+
+.type-pattern:hover {
+    font-size: 100%;
 }
 
 .type-enum {
@@ -283,7 +292,7 @@
 
 .box-container {
     float: left;
-    padding-top: 6px;
+    padding-top: 4px;
     padding-left: 8px;
     display: none;
 }
@@ -299,6 +308,25 @@
 
 .button:hover {
     color: darkred;
+}
+
+@media all and (min-width: 20px) and (max-width: 500px) {
+    .property-name {
+        min-width: 0px;
+    }
+    .signature-type {
+        min-width: 0px;
+    }
+    .source {
+        width: 100%;
+    }
+    .box-container, .box {
+        width: 100%;
+    }
+}
+
+.desc {
+    line-height: 17px;
 }
 
 .desc p {
