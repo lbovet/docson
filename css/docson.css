@@ -77,7 +77,7 @@
 
 .box-name {
     color: darkblue;
-    padding: 2px 40px 2px 2px;
+    padding: 5px 40px 2px 3px;
     float: left;
 }
 
@@ -326,11 +326,13 @@
 }
 
 .desc {
+    padding-left: 6px;
     line-height: 17px;
 }
 
 .desc p {
     margin: 0;
+    margin-top: 3px;
 }
 
 .desc table {
