@@ -180,17 +180,9 @@
     color: dimgray;
 }
 
-.docson .type-keyword:hover {
-    font-size: 100%;
-}
-
 .docson .type-pattern {
     font-size: 80%;
     color: darkolivegreen;
-}
-
-.docson .type-pattern:hover {
-    font-size: 100%;
 }
 
 .docson .type-enum {
