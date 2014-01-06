@@ -186,8 +186,9 @@
 }
 
 .docson .type-enum {
-    color: dimgray;
+    color: purple;
     font-family: monospace;
+    font-size: 90%;
     padding-left: 2px;
 }
 
@@ -327,16 +328,31 @@
     margin-top: 3px;
 }
 
+.docson .desc code {
+    color: purple;
+    font-size: 90%;
+}
+
+
 .docson .desc table {
     margin-top: 4px;
     margin-bottom: 4px;
     border-collapse:collapse;
 }
 
+.docson .desc th {
+    padding: 0px;
+    font-size: 80%;
+    font-weight: normal;
+    background: lightgrey;
+}
+
 .docson .desc table,th,td
 {
-    padding: 3px;
     border: 1px solid lightgrey;
+}
+.docson .desc tr > td {
+    padding: 2px 6px 2px 6px;
 }
 
 .docson .desc h1 {
