@@ -28,7 +28,6 @@ if (script.attributes["data-schema"]) {
         "' style='padding: 0; border: 0; width:100%; background: transparent' src='" +
         docson + "#" +
         script.attributes["data-schema"].value + "'></iframe>");
-    window.addEventListener("message", receiveMessage, false);
     function receiveMessage(event) {
         if (event.data.id && event.data.id == "docson" && event.data.action == "resized") {
             var frame = document.getElementById(event.data.url);
@@ -36,6 +35,7 @@ if (script.attributes["data-schema"]) {
             frame.height = event.data.height + 18;
         }
     }
+    window.addEventListener("message", receiveMessage, false);
 } else {
     alert("<p style='color:red'>Missing data-schema (url to schema)</p>")
 }
