@@ -45,7 +45,7 @@ See the [widget example](http://jsfiddle.net/3kXu2/3/) on jsfiddle.
 
 ## Swagger
 
-You can adapt Swagger UI to display Docson-generated model documentation instead of the builtin signatures.
+You can adapt [Swagger UI](https://github.com/wordnik/swagger-ui) to display Docson-generated model documentation instead of the builtin signatures.
 
 See how it looks like in the [Swagger Docson example](http://lbovet.github.io/swagger-ui/dist/index.html)
 
