@@ -43,6 +43,30 @@ To include a Docson schema documentations on any page (wiki, ...) without worryi
 
 See the [widget example](http://jsfiddle.net/3kXu2/3/) on jsfiddle.
 
+## Swagger
+
+You can adapt Swagger UI to display Docson-generated model documentation instead of the builtin signatures.
+
+See how it looks like in the [Swagger Docson example](http://lbovet.github.io/swagger-ui/dist/index.html)
+
+In Swagger UI's `index.html`, include the [Swagger integration script after other script tags](https://github.com/lbovet/swagger-ui/blob/3f37722b03db6c48cc2a8460df26dda5f4d6f8e4/src/main/html/index.html#L19):
+```
+  <script src='/path-to-docson/docson-swagger.js' type='text/javascript'></script>
+```
+
+For a better layout of parameter models, you may [want to change the width of some elements](https://github.com/lbovet/swagger-ui/blob/3f37722b03db6c48cc2a8460df26dda5f4d6f8e4/src/main/html/index.html#L20-L27):
+
+```
+  <style>
+      .swagger-ui-wrap {
+          max-width: 1200px;
+      }
+      .swagger-ui-wrap .body-textarea {
+          width: 200px;
+      }
+  </style>
+```
+
 ## Integration
 
 You can also integrate Docson in your application and use its javascript API:
@@ -51,7 +75,7 @@ You can also integrate Docson in your application and use its javascript API:
 docson.doc(element, schema, ref)
 ```
 
-* `element` is the element which will host the documentation. Either a DOM element or jQuery element.
+* `element` is the element which will host the documentation. Either a DOM element (id or object) or jQuery element.
 * `schema` is the URI or path to the schema or a string containing the schema source itself.
 * `ref` is an optional json-pointer path to a sub-schema.
 

@@ -344,7 +344,7 @@
     padding: 0px;
     font-size: 80%;
     font-weight: normal;
-    background: lightgrey;
+    background: rgba(231, 231, 231, 50);
 }
 
 .docson .desc table,th,td
