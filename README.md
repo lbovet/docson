@@ -54,6 +54,18 @@ In Swagger UI's `index.html`, include the [Swagger integration script after othe
   <script src='/path-to-docson/docson-swagger.js' type='text/javascript'></script>
 ```
 
+Also, you will need a patched version of [Swagger Client](https://github.com/lbovet/swagger-js/blob/models-exposed/lib/swagger.js) so that the raw json-schema model is visible from Docson. Either replace the `swagger.js` file in your Swagger UI disctribution or take it directly from github by replacing
+
+```
+   <script src='/lib/swagger.js' type='text/javascript'></script>
+```
+
+with 
+
+```
+  <script src='https://raw2.github.com/lbovet/swagger-js/models-exposed/lib/swagger.js' type='text/javascript'></script>
+```
+
 For a better layout of parameter models, you may [want to change the width of some elements](https://github.com/lbovet/swagger-ui/blob/3f37722b03db6c48cc2a8460df26dda5f4d6f8e4/src/main/html/index.html#L20-L27):
 
 ```

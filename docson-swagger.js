@@ -43,7 +43,11 @@ function createDoc(definitions, type) {
 
 SwaggerOperation.prototype.getSignature = function(type, models) {
     var collectionType, isPrimitive;
-    collectionType = this.isCollectionType(type);
+    if(this.isCollectionType) {
+        collectionType = this.isCollectionType(type);
+    } else {
+        collectionType = this.isListType(type);
+    }
     isPrimitive = ((collectionType != null) && models[collectionType]) || (models[type] != null) ? false : true;
     if (isPrimitive) {
         return type;
