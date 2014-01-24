@@ -272,7 +272,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
             if(target) {
                 return options.fn(target);
             } else {
-                return new Handlebars.SafeString("<span class='error'>Error: Could not resolve schema <em>"+schema.$ref+"</em></span>");
+                return new Handlebars.SafeString("<span class='signature-type-ref'>"+schema.$ref+"</span>");
             }
         }
     });
