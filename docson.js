@@ -320,6 +320,13 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
             var refs = {};
 
             traverse(schema).forEach(function(item) {
+                // Fix Swagger weird generation for array.
+                if(item && item.$ref == "array") {
+                    delete item.$ref;
+                    item.type ="array";
+                }
+
+                // Fetch external schema
                 if(this.key === "$ref") {
                     if((/^https?:\/\//).test(item)) {
                         var segments = item.split("#");
