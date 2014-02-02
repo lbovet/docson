@@ -54,7 +54,7 @@
 
                             if(/\.ts$/.test(segments[0])) {
                                 require.config( { baseUrl: "../typson" } );
-                                require(["typson-schema"], function(typson) {
+                                require(["lib/typson-schema"], function(typson) {
                                     typson.definitions(segments[0]).done(render);
                                 });
                             } else {
