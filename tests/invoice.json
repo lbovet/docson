@@ -1,52 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Docson Example</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="css/docson.css">
-    <script src="js/jsonpointer.js"></script>
-    <script src="js/jquery.js"></script>
-    <script src="js/handlebars.js"></script>
-    <script src="js/docson.js"></script>
-    <script src="js/markdown.js"></script>
-</head>
-<body>
-<div id="doc"></div>
-<script charset="utf-8">
-    $(function() {
-        var schema =
-        {
-            "id": "Invoice",
-            "description": "Represents the _document_ sent to the customer for payment.",
-            "properties": {
-                "customer": {
-                    "description": "Who will pay?\nNot me! éàè",
-                    "type": "string"
-                },
-                "lines": {
-                    "description": "Invoice content ",
-                    "type": "array",
-                    "items": {
-                        "$ref": "InvoiceLine"
-                    }
-                },
-                "dimension": {
-                    "description": "Total dimension of the order ",
-                    "$ref": "Dimension"
-                },
-                "props": {
-                    "type": "object",
-                    "properties": {
-                        "key": {
-                            "type": "string"
-                        },
-                        "value" : {
-                            "type": "string"
+[
+    {
+        "schema": {
+            "Invoice": {
+                "id": "Invoice",
+                "description": "Represents the document sent to the customer for payment.",
+                "properties": {
+                    "customer": {
+                        "description": "Who will pay?\nNot me! éàè",
+                        "type": "string"
+                    },
+                    "lines": {
+                        "description": "Invoice content\n",
+                        "minItems": "1",
+                        "maxItems": "50",
+                        "type": "array",
+                        "items": {
+                            "$ref": "InvoiceLine"
                         }
+                    },
+                    "dimension": {
+                        "description": "Total dimension of the order ",
+                        "$ref": "Dimension"
                     }
                 }
             },
-            "required": [ "customer" ],
             "InvoiceLine": {
                 "id": "InvoiceLine",
                 "properties": {
@@ -54,6 +31,10 @@
                         "$ref": "Product"
                     },
                     "quantity": {
+                        "minimum": "0",
+                        "exclusiveMinimum": "true",
+                        "maximum": "10",
+                        "exclusiveMaximum": "false",
                         "type": "number"
                     }
                 }
@@ -104,10 +85,14 @@
                         "type": "number"
                     }
                 }
+            },
+            "CategoryIndex": {
+                "id": "CategoryIndex",
+                "properties": {
+                    "categories": {},
+                    "products": {},
+                    "sizes": {}
+                }
             }
         }
-        docson.doc("doc", schema);
-    });
-</script>
-</body>
-</html>
+    }]
