@@ -46,7 +46,9 @@
                         if(segments[0]) {
                             function render(schema) {
                                 try {
-                                    docson.doc("doc", schema, segments[1]);
+                                    docson.doc("doc", schema, segments[1]).done(function() {
+                                        maybeExpand(segments);
+                                    });
                                 } catch (e) {
                                     error("Could not parse schema: " + e.message + "<pre>" + $('<pre/>').text(schema).html() + "</pre>");
                                 }
@@ -69,7 +71,9 @@
                                 if(event.data.id && event.data.id == "docson") {
                                     if(event.data.type) {
                                         try {
-                                            docson.doc("doc", event.data.definitions, event.data.type);
+                                            docson.doc("doc", event.data.definitions, event.data.type).done(function() {
+                                                maybeExpand(segments);
+                                            });
                                         } catch (e) {
                                             error("Could not parse schema: " + e.message + "<pre>" + $('<pre/>').text(event.data.definitions).html() + "</pre>");
                                         }
@@ -79,11 +83,21 @@
                                 }
                             }
                             window.addEventListener("message", receiveMessage, false);
-                            window.parent.postMessage( { id: "docson", action: "ready", url: url}, "*");
+                            var host = window.opener || window.parent;
+                            host.postMessage( { id: "docson", action: "ready", url: url}, "*");
                         }
                     } else {
                         $("#doc").empty();
                         $("#form").show();
+                    }
+                }
+
+                function maybeExpand(segments) {
+                    if(segments.indexOf("expand") >0 ) {
+                        $("#doc").find(".expand-button").html(" - ").attr("title", "Collapse all");
+                        $("#doc").find(".signature-type-expandable").addClass("signature-type-expanded");
+                        $("#doc").find(".box-container").show();
+                        $("#doc").find(".expand-button").attr("expanded", true);
                     }
                 }
 

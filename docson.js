@@ -268,6 +268,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
             var target = resolveRef(schema.$ref);
             if(target) {
                 target.__name = refName(schema.$ref);
+                target.__ref = schema.$ref.replace("#", "");
             }
             if(target) {
                 return options.fn(target);
@@ -357,6 +358,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 }
 
                 target.root = true;
+                target.__ref = "<root>";
                 var html = boxTemplate(target);
 
                 if(ref) {
@@ -381,6 +383,28 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                         highlight.highlightSchema(schemaElement);
                     });
                 }
+                element.find(".box-title").each(function() {
+                   var ref = $(this).attr("ref");
+                   if(ref) {
+                       if(window.location.href.indexOf("docson/index.html") > -1) {
+                           $(this).find(".box-name").css("cursor", "pointer").attr("title", "Open in new window")
+                           .click(function() {
+                                var url = window.location.href+"$$expand";
+                                if(ref !=="<root>") {
+                                   url = url.replace(/(docson\/index.html#[^\$]*).*/, "$1$"+ref+"$$expand");
+                                }
+                                var w;
+                                function receiveMessage(event) {
+                                   if (event.data.id && event.data.id == "docson" && event.data.action == "ready") {
+                                       w.postMessage({ id: "docson", action: "load", definitions: schema, type: event.data.url.split("$")[1], expand: true}, "*");
+                                   }
+                                }
+                                window.addEventListener("message", receiveMessage, false);
+                                w = window.open(url, "_blank");
+                           });
+                       }
+                   }
+                });
                 element.find(".box").mouseenter(function() {
                     $(this).children(".source-button").fadeIn(300);
                     $(this).children(".box-body").children(".expand-button").fadeIn(300);
@@ -397,17 +421,17 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                     resized();
                 });
                 element.find(".expand-button").click(function() {
-                    if(this.expanded) {
-                        $(this).html(" + ").attr("title", "Expand all");
+                    if($(this).attr("expanded")) {
+                        $(this).parent().parent().find(".expand-button").html(" + ").attr("title", "Expand all");
                         $(this).parent().parent().find(".signature-type-expandable").removeClass("signature-type-expanded");
                         $(this).parent().parent().find(".box-container").hide( resizeHandler ? 0 : 300);
-                        this.expanded=false;
+                        $(this).parent().parent().find(".expand-button").removeAttr("expanded");
                         resized();
                     } else {
-                        $(this).html(" - ").attr("title", "Collapse all");
+                        $(this).parent().parent().find(".expand-button").html(" - ").attr("title", "Collapse all");
                         $(this).parent().parent().find(".signature-type-expandable").addClass("signature-type-expanded");
                         $(this).parent().parent().find(".box-container").show(resizeHandler ? 0 : 300);
-                        this.expanded=true;
+                        $(this).parent().parent().find(".expand-button").attr("expanded", true);
                         resized();
                     }
                 });
