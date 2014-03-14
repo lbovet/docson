@@ -25,9 +25,9 @@
     float: left;
     background-color:rgba(255, 255, 255, 0.2);
     border: 1px solid lightgrey;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
     padding-bottom: 10px;
     -moz-box-shadow:    1px 1px 1px darkgray;
     -webkit-box-shadow: 1px 1px 1px darkgray;
@@ -44,7 +44,7 @@
     text-align: center;
     cursor: pointer;
     font-weight: bold;
-    font-family: monospace;
+    font-family: "Lucida Console", Monaco, monospace;
     font-size: 15px;
     color: darkgray;
     display: none;
@@ -59,7 +59,7 @@
     text-align: center;
     cursor: pointer;
     font-weight: bold;
-    font-family: monospace;
+    font-family: "Lucida Console", Monaco, monospace;
     font-size: 10px;
     color: darkgray;
     display: none;
@@ -67,12 +67,12 @@
 
 .docson .box-header {
     padding: 6px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
     border-bottom: 1px solid lightgrey;
     background: whitesmoke;
-    background: -webkit-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
-    background: -moz-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
+   /* background: -webkit-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
+    background: -moz-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);*/
 }
 
 .docson .box-name {
@@ -107,9 +107,9 @@
 }
 
 .docson .box-1 {
-    background: whitesmoke;
+    background: whitesmoke;/*
     background: -webkit-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
-    background: -moz-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);
+    background: -moz-linear-gradient(ghostwhite, whitesmoke, whitesmoke, gainsboro);*/
 }
 
 .docson .box-2 {
@@ -167,7 +167,7 @@
 
 .docson .property-name {
     float: left;
-    font-family: monospace;
+    font-family: "Lucida Console", Monaco, monospace;
     min-width: 130px;
 }
 
@@ -187,14 +187,14 @@
 
 .docson .type-enum {
     color: purple;
-    font-family: monospace;
+    font-family: "Lucida Console", Monaco, monospace;
     font-size: 90%;
     padding-left: 2px;
 }
 
 .docson .type-default {
     color: darkslategrey;
-    font-family: monospace;
+    font-family: "Lucida Console", Monaco, monospace;
 }
 
 .docson .signature-type {
@@ -224,7 +224,7 @@
 }
 
 .docson .signature-type-null {
-    font-family: monospace;
+    font-family: "Lucida Console", Monaco, monospace;
     color: red;
 }
 
@@ -255,7 +255,7 @@
 .docson .signature-button {
     cursor: pointer;
     padding: 4px;
-    border-radius: 6px;
+    border-radius: 4px;
     border: 1px solid lightgrey;
     -moz-border-radius: 4px;
 }
@@ -265,6 +265,8 @@
 }
 
 .docson .signature-type-expanded {
+    padding: 5px 3px 3px 5px;
+    vertical-align: -1px;
     opacity: 0.6;
     -moz-box-shadow:    inset 1px 1px 1px darkgray;
     -webkit-box-shadow: inset 1px 1px 1px darkgray;
@@ -381,9 +383,9 @@
 
 .docson .desc pre {
     border: 1px solid lightgray;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
     padding: 4px;
     margin: 3px 0px;
 }
@@ -423,7 +425,7 @@
 }
 
 .docson .json, .json-schema {
-    font-family: monospace;
+    font-family: "Lucida Console", Monaco, monospace;
 }
 
 .docson .json-punctuation {
