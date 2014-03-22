@@ -201,6 +201,7 @@
     padding-left: 6px;
     float: left;
     min-width: 160px;
+    max-width: 320px;
 }
 
 .docson .signature-type-any {
