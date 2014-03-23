@@ -160,6 +160,12 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
         }
     });
 
+    Handlebars.registerHelper('enum', function(schema) {
+        if(schema.enum) {
+            return (schema.enum.length > 1) ? "enum": "constant";
+        }
+    });
+
     Handlebars.registerHelper('obj', function(schema, options) {
         if(schema.properties || schema.type == "object") {
             return withType(schema, options);
