@@ -45,6 +45,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
         delete schema.root;
         delete schema.__boxId;
         delete schema.__name;
+        delete schema.__ref;
         return JSON.stringify(schema, null, 2);
     });
 
@@ -276,11 +277,14 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 target.__name = refName(schema.$ref);
                 target.__ref = schema.$ref.replace("#", "");
             }
+            var result;
             if(target) {
-                return options.fn(target);
+                result = options.fn(target);
             } else {
-                return new Handlebars.SafeString("<span class='signature-type-ref'>"+schema.$ref+"</span>");
+                result = new Handlebars.SafeString("<span class='signature-type-ref'>"+schema.$ref+"</span>");
             }
+            delete target.__ref;
+            return result;
         }
     });
 
@@ -394,6 +398,9 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                    if(ref) {
                        if(window.location.href.indexOf("docson/index.html") > -1) {
                            $(this).find(".box-name").css("cursor", "pointer").attr("title", "Open in new window")
+                           .hover(
+                               function(){ $(this).addClass('link') },
+                               function(){ $(this).removeClass('link') })
                            .click(function() {
                                 var url = window.location.href+"$$expand";
                                 if(ref !=="<root>") {

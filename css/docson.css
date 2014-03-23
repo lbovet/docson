@@ -86,6 +86,10 @@
     font-size: 120%;
 }
 
+.docson .link {
+    text-decoration: underline;
+}
+
 .docson .box-description {
     color: dimgray;
     float: left;
