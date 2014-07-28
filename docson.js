@@ -283,7 +283,9 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
             } else {
                 result = new Handlebars.SafeString("<span class='signature-type-ref'>"+schema.$ref+"</span>");
             }
-            delete target.__ref;
+            if(target) {
+                delete target.__ref;
+            }
             return result;
         }
     });
