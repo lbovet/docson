@@ -318,7 +318,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
         });
     };
 
-    docson.doc = function(element, schema, ref) {
+    docson.doc = function(element, schema, ref, baseUrl) {
         var d = $.Deferred();
         init();
         ready.done(function() {
@@ -341,7 +341,16 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
 
                 // Fetch external schema
                 if(this.key === "$ref") {
+                    var external = false;
                     if((/^https?:\/\//).test(item)) {
+                        external = true;
+                    } else if(item.indexOf('#') > 0){
+                        //Turning relative refs to absolute ones
+                        external = true;
+                        item = baseUrl + item;
+                        this.update(item);
+                    }
+                    if(external){
                         var segments = item.split("#");
                         var p = $.get(segments[0]).then(function(content) {
                             if(typeof content != "object") {
@@ -368,7 +377,6 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                     target = jsonpointer.get(schema, ref);
                     stack.push( schema );
                 }
-
                 target.root = true;
                 target.__ref = "<root>";
                 var html = boxTemplate(target);

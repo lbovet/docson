@@ -46,7 +46,7 @@
                         if(segments[0]) {
                             function render(schema) {
                                 try {
-                                    docson.doc("doc", schema, segments[1]).done(function() {
+                                    docson.doc("doc", schema, segments[1], segments[0].replace(/\/[^\/]*\/?$/, '/')).done(function() {
                                         maybeExpand(segments);
                                     });
                                 } catch (e) {
