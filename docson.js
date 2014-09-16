@@ -320,6 +320,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
 
     docson.doc = function(element, schema, ref, baseUrl) {
         var d = $.Deferred();
+        if(baseUrl === undefined) baseUrl='';
         init();
         ready.done(function() {
             if(typeof element == "string") {
@@ -332,44 +333,8 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
             var refsPromise = $.Deferred().resolve().promise();
             var refs = {};
 
-            traverse(schema).forEach(function(item) {
-                // Fix Swagger weird generation for array.
-                if(item && item.$ref == "array") {
-                    delete item.$ref;
-                    item.type ="array";
-                }
 
-                // Fetch external schema
-                if(this.key === "$ref") {
-                    var external = false;
-                    if((/^https?:\/\//).test(item)) {
-                        external = true;
-                    } else if(item.indexOf('#') > 0){
-                        //Turning relative refs to absolute ones
-                        external = true;
-                        item = baseUrl + item;
-                        this.update(item);
-                    }
-                    if(external){
-                        var segments = item.split("#");
-                        var p = $.get(segments[0]).then(function(content) {
-                            if(typeof content != "object") {
-                                try {
-                                    content = JSON.parse(content);
-                                } catch(e) {
-                                    console.error("Unable to parse "+segments[0], e);
-                                }
-                            }
-                            if(content) {
-                                refs[item] = content;
-                            }
-                        });
-                        refsPromise = p.then(refsPromise)
-                    }
-                }
-            });
-
-            refsPromise.done(function() {
+            var renderBox = function() {
                 stack.push(refs);
                 var target = schema;
                 if(ref) {
@@ -463,7 +428,52 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                     $(this).parent().children(".source").toggle();
                     resized();
                 });
-            });
+            };
+
+            var resolveRefsReentrant = function(schema){
+                traverse(schema).forEach(function(item) {
+                    // Fix Swagger weird generation for array.
+                    if(item && item.$ref == "array") {
+                        delete item.$ref;
+                        item.type ="array";
+                    }
+
+                    // Fetch external schema
+                    if(this.key === "$ref") {
+                        var external = false;
+                        if((/^https?:\/\//).test(item)) {
+                            external = true;
+                        } else if(item.indexOf('#') > 0){
+                            //Turning relative refs to absolute ones
+                            external = true;
+                            item = baseUrl + item;
+                            this.update(item);
+                        }
+                        if(external){
+                            var segments = item.split("#");
+                            refs[item] = null;
+                            var p = $.get(segments[0]).then(function(content) {
+                                if(typeof content != "object") {
+                                    try {
+                                        content = JSON.parse(content);
+                                    } catch(e) {
+                                        console.error("Unable to parse "+segments[0], e);
+                                    }
+                                }
+                                if(content) {
+                                    refs[item] = content;
+                                    renderBox();
+                                    resolveRefsReentrant(content); 
+                                }
+                            });
+                        }
+                    }
+                });
+            };
+            
+            resolveRefsReentrant(schema);
+            renderBox();
+            
             d.resolve();
         })
         return d.promise();
