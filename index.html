@@ -63,7 +63,9 @@
                                 $.get(segments[0])
                                         .done(render)
                                         .fail(function (xhr, status, err) {
-                                            error("Could not load " + segments[0] + ": " + status + " " + err);
+                                            error("Could not load " + segments[0].replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+                                                   return '&#'+i.charCodeAt(0)+';';
+                                            }) + ": " + status + " " + err);
                                         });
                             }
                         }
