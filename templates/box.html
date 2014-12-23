@@ -16,7 +16,7 @@
 {{#scope this}}
  <div class="box">
     <div class="box-header box-{{__boxId}}">
-        <div class="box-title">
+        <div class="box-title" ref="{{__ref}}">
             {{#name this}}<div class="box-name {{#if root}}title{{/if}}">{{__name}}</div>{{/name}}
             <div class="box-description desc">{{desc this}}</div>
             <div class="end"></div>
