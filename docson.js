@@ -112,7 +112,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
     });
 
     var sub = function(schema) {
-        return schema.type == "array" || schema.allOf || schema.anyOf || schema.oneOf || schema.not || schema.additionalProperties;
+        return schema.type == "array" || schema.allOf || schema.anyOf || schema.oneOf || schema.not;
     }
 
     Handlebars.registerHelper('sub', function(schema, options) {
