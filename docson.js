@@ -441,15 +441,22 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                     // Fetch external schema
                     if(this.key === "$ref") {
                         var external = false;
+                        //Local meaning local to this server, but not in this file.
+                        var local = false;
                         if((/^https?:\/\//).test(item)) {
                             external = true;
-                        } else if(item.indexOf('#') > 0){
+                        }
+                        else if((/^[^#]/).test(item)) {
+                            local = true;
+                        } else if(item.indexOf('#') > 0) {
+                            //Internal reference
                             //Turning relative refs to absolute ones
                             external = true;
                             item = baseUrl + item;
                             this.update(item);
                         }
                         if(external){
+                            //External reference, fetch it.
                             var segments = item.split("#");
                             refs[item] = null;
                             var p = $.get(segments[0]).then(function(content) {
@@ -464,6 +471,25 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                     refs[item] = content;
                                     renderBox();
                                     resolveRefsReentrant(content); 
+                                }
+                            });
+                        }
+                        else if(local) {
+                            //Local to this server, fetch relative
+                            var segments = item.split("#");
+                            refs[item] = null;
+                            var p = $.get(baseUrl + segments[0]).then(function(content) {
+                                if(typeof content != "object") {
+                                    try {
+                                        content = JSON.parse(content);
+                                    } catch(e) {
+                                        console.error("Unable to parse "+segments[0], e);
+                                    }
+                                }
+                                if(content) {
+                                    refs[item] = content;
+                                    renderBox();
+                                    resolveRefsReentrant(content);
                                 }
                             });
                         }
