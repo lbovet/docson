@@ -140,5 +140,21 @@
                 "valid": false
             }
         ]
-    }    
+    },
+    {
+        "description": "circular refs",
+        "schema": {
+            "definitions": {
+                "a": {
+                    "properties": {
+                        "more": {"$ref": "#/definitions/a"}
+                    }
+                }
+            },
+            "properties": {
+                "prop": {"$ref": "#/definitions/a"}
+            }
+        },
+        "tests": []
+    }
 ]
