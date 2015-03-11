@@ -264,7 +264,10 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
 
     function renderSchema(schema) {
         if(stack.indexOf(schema) == -1) { // avoid recursion
-            return new Handlebars.SafeString(boxTemplate(schema));
+            stack.push(schema);
+            var ret = new Handlebars.SafeString(boxTemplate(schema));
+            stack.pop();
+            return ret;
         } else {
             return new Handlebars.SafeString(boxTemplate({"description": "_circular reference_"}));
         }
