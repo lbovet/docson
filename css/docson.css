@@ -354,10 +354,12 @@
     background: rgba(231, 231, 231, 0.5);
 }
 
-.docson .desc table,th,td
-{
+.docson .desc table,
+.docson .desc th,
+.docson .desc td {
     border: 1px solid lightgrey;
 }
+
 .docson .desc tr > td {
     padding: 2px 6px 2px 6px;
 }
