@@ -156,5 +156,19 @@
             }
         },
         "tests": []
+    },
+    {
+        "description": "first class ref",
+        "schema": {
+            "definitions": {
+              "a": {
+                "properties": {
+                  "more": {"type":"integer"}
+                }
+              }
+            },
+            "$ref":"#/definitions/a"
+        },
+        "tests":[]
     }
 ]
