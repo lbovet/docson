@@ -27,25 +27,32 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
     var stack = [];
     var boxes=[];
 
-    Handlebars.registerHelper('scope', function(schema, options) {
-        if(schema.$ref && schema.$ref!="#")
-        {
-          stack.push( schema );
-          var target=resolveRef(schema.$ref);
-          if(target) {
-            target.__name = refName(schema.$ref);
-            target.__ref = schema.$ref.replace("#", "");
-          }
-          stack.pop();
-          if(target) {
-            var newSchema = schema;
-            newSchema.$ref = undefined;
-            Object.keys(target).forEach(function(key) {
-              newSchema[key] = target[key];
-            });
-            schema = newSchema;
-          }
+    function resolveFirstClassRef(schema)
+    {
+      if(schema.$ref && schema.$ref!="#")
+      {
+        stack.push( schema );
+        var target=resolveRef(schema.$ref);
+        if(target) {
+          target.__name = refName(schema.$ref);
+          target.__ref = schema.$ref.replace("#", "");
         }
+        stack.pop();
+        if(target) {
+          var newSchema = schema;
+          newSchema.$ref = undefined;
+          Object.keys(target).forEach(function(key) {
+            newSchema[key] = target[key];
+          });
+          schema = newSchema;
+          schema=resolveFirstClassRef(schema); // nested refs
+        }
+      }
+      return schema;
+    }
+
+    Handlebars.registerHelper('scope', function(schema, options) {
+        schema=resolveFirstClassRef(schema);
 
         var result;
         boxes.push([]);
