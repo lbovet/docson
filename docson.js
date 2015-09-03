@@ -433,7 +433,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 });
             };
 
-            var resolveRefsReentrant = function(schema){
+            var resolveRefsReentrant = function(schema, refStack){
                 traverse(schema).forEach(function(item) {
                     // Fix Swagger weird generation for array.
                     if(item && item.$ref == "array") {
@@ -441,8 +441,10 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                         item.type ="array";
                     }
 
-                    // Fetch external schema
-                    if(this.key === "$ref") {
+                    // Fetch external schema, if it is not a recursive fetch
+                    if(this.key === "$ref" && stack.indexOf(item) == -1 && refStack.indexOf(item) == -1) {
+                        var localStack = refStack.slice();
+                        localStack.push(item);
                         var external = false;
                         //Local meaning local to this server, but not in this file.
                         var local = false;
@@ -473,7 +475,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                 if(content) {
                                     refs[item] = content;
                                     renderBox();
-                                    resolveRefsReentrant(content); 
+                                    resolveRefsReentrant(content, localStack);
                                 }
                             });
                         }
@@ -492,7 +494,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                 if(content) {
                                     refs[item] = content;
                                     renderBox();
-                                    resolveRefsReentrant(content);
+                                    resolveRefsReentrant(content, localStack);
                                 }
                             });
                         }
@@ -500,7 +502,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 });
             };
             
-            resolveRefsReentrant(schema);
+            resolveRefsReentrant(schema, []);
             renderBox();
             
             d.resolve();
