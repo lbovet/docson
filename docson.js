@@ -28,18 +28,23 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
     var boxes=[];
 
     Handlebars.registerHelper('scope', function(schema, options) {
-        if(schema.$ref || (schema.type && schema.type.$ref))
+        if(schema.$ref && schema.$ref!="#")
         {
           stack.push( schema );
-          var inside=resolveRef(schema.type && schema.type.$ref ? schema.type.$ref : schema.$ref);
+          var target=resolveRef(schema.$ref);
+          if(target) {
+            target.__name = refName(schema.$ref);
+            target.__ref = schema.$ref.replace("#", "");
+          }
           stack.pop();
-          var newSchema=schema;
-          newSchema["$ref"]=undefined;
-          if(schema.type && schema.type.$ref) newSchema["type"]=undefined;
-          Object.keys(inside).forEach(function(key){
-            newSchema[key]=inside[key];
-          });
-          schema=newSchema;
+          if(target) {
+            var newSchema = schema;
+            newSchema.$ref = undefined;
+            Object.keys(target).forEach(function(key) {
+              newSchema[key] = target[key];
+            });
+            schema = newSchema;
+          }
         }
 
         var result;
