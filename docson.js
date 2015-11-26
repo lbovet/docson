@@ -475,7 +475,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                     }
                                 }
                                 if(content) {
-                                    refs[item] = content;
+                                    refs[item] = jsonpointer.get(content, segments[1]);
                                     renderBox();
                                     resolveRefsReentrant(content); 
                                 }
@@ -496,7 +496,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                     }
                                 }
                                 if(content) {
-                                    refs[item] = content;
+                                    refs[item] = jsonpointer.get(content, segments[1]);
                                     renderBox();
                                     var splitSegment = segments[0].split('/')
                                     resolveRefsReentrant(content, relPath+splitSegment.slice(0, splitSegment.length-1).join('/')+"/");
