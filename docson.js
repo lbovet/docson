@@ -26,6 +26,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
     var source;
     var stack = [];
     var boxes=[];
+    var requests = {};
 
     Handlebars.registerHelper('scope', function(schema, options) {
         var result;
@@ -463,7 +464,9 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                             //External reference, fetch it.
                             var segments = item.split("#");
                             refs[item] = null;
-                            var p = $.get(segments[0]).then(function(content) {
+                            var url = segments[0];
+                            var request = requests[url] = requests[url] || $.get(url);
+                            var p = request.then(function(content) {
                                 if(typeof content != "object") {
                                     try {
                                         content = JSON.parse(content);
@@ -482,7 +485,9 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                             //Local to this server, fetch relative
                             var segments = item.split("#");
                             refs[item] = null;
-                            var p = $.get(baseUrl + basePath + segments[0]).then(function(content) {
+                            var url = baseUrl + basePath + segments[0];
+                            var request = requests[url] = requests[url] || $.get(url);
+                            var p = request.then(function(content) {
                                 if(typeof content != "object") {
                                     try {
                                         content = JSON.parse(content);
