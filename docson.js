@@ -433,8 +433,14 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 });
             };
 
-            var resolveRefsReentrant = function(schema){
+            var resolveRefsReentrant = function(schema, relative_path){
                 traverse(schema).forEach(function(item) {
+                    
+                    if (relative_path) {
+                        currentUrl = relative_path;
+                    } else {
+                        currentUrl = baseUrl;
+                    }
                     // Fix Swagger weird generation for array.
                     if(item && item.$ref == "array") {
                         delete item.$ref;
@@ -455,7 +461,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                             //Internal reference
                             //Turning relative refs to absolute ones
                             external = true;
-                            item = baseUrl + item;
+                            item = currentUrl + item;
                             this.update(item);
                         }
                         if(external){
@@ -481,18 +487,23 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                             //Local to this server, fetch relative
                             var segments = item.split("#");
                             refs[item] = null;
-                            var p = $.get(baseUrl + segments[0]).then(function(content) {
+                            var child_relative_path = currentUrl + segments[0].replace("//", "/");
+                            child_relative_path = child_relative_path.split('/');
+                            var segment_filename = child_relative_path.pop();
+                            child_relative_path = child_relative_path.join('/') + '/';
+
+                            var p = $.get(child_relative_path + segment_filename).then(function(content) {
                                 if(typeof content != "object") {
                                     try {
                                         content = JSON.parse(content);
                                     } catch(e) {
-                                        console.error("Unable to parse "+segments[0], e);
+                                        console.error("Unable to parse " + segment_filename, e);
                                     }
                                 }
                                 if(content) {
                                     refs[item] = content;
                                     renderBox();
-                                    resolveRefsReentrant(content);
+                                    resolveRefsReentrant(content, child_relative_path);
                                 }
                             });
                         }
