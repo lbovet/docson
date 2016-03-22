@@ -1,0 +1,22 @@
+{
+  "name": "docson-tests",
+  "version": "1.0.0",
+  "description": "docson tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify test.js -o bundle.js",
+    "start": "beefy test.js:bundle.js 7890"
+  },
+  "keywords": [
+    "docson",
+    "tests"
+  ],
+  "author": "Laurent Bovet",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "beefy": "^2.1.6",
+    "brfs": "^1.4.3",
+    "browserify": "^13.0.0"
+  }
+}
