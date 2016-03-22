@@ -1,6 +1,7 @@
 <p align='right'>A <a href="http://www.swisspush.org">swisspush</a> project <a href="http://www.swisspush.org" border=0><img align="top"  src='https://1.gravatar.com/avatar/cf7292487846085732baf808def5685a?s=32'></a></p>
 Docson
 ======
+
 [![NPM version](https://img.shields.io/npm/v/docson.svg)](https://www.npmjs.com/package/docson)
 
 Documentation for your JSON types.
