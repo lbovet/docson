@@ -1,6 +1,6 @@
+#  Docson
+
 <p align='right'>A <a href="http://www.swisspush.org">swisspush</a> project <a href="http://www.swisspush.org" border=0><img align="top"  src='https://1.gravatar.com/avatar/cf7292487846085732baf808def5685a?s=32'></a></p>
-Docson
-======
 
 [![NPM version](https://img.shields.io/npm/v/docson.svg)](https://www.npmjs.com/package/docson)
 
@@ -15,7 +15,7 @@ Give Docson a JSON schema and it will generate a [beautiful documentation](http:
 
 ## Installation
 
-* Place the Docson distribution on the web server serving the schemas (to avoid cross-origin issues).
+`npm install docson`
 
 ## Usage
 
@@ -47,6 +47,27 @@ var schema={
 docson.doc(element,schema);
 ```
 
+with a simple html file such as 
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Docson</title>
+</head>
+
+<body>
+<script src="bundle.js"></script>
+</body>
+
+</html>
+```
+
+Browserify can be used to generate the bundle.js.
+
+See [Example](example/)
+
 ## API
 
 ```javascript
@@ -57,7 +78,6 @@ docson.doc(element, schema, ref)
 * `schema` is the URI or path to the schema or a string containing the schema source itself.
 * `ref` is an optional json-pointer path to a sub-schema.
 
-[Example](http://lbovet.github.io/docson/example/index.html)
 
 ## Limitations
 
