@@ -72,7 +72,7 @@
                         function receiveMessage(event) {
                             console.log(">", event)
                             if(event.data.id && event.data.id == "docson") {
-                                if(event.data.type) {
+                                if(event.data.hasOwnProperty('type')) {
                                     try {
                                         docson.doc("doc", event.data.definitions, event.data.type).done(function() {
                                             maybeExpand(segments);
