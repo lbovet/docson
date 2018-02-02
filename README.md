@@ -1,4 +1,5 @@
 <p align='right'>A <a href="http://www.swisspush.org">swisspush</a> project <a href="http://www.swisspush.org" border=0><img align="top"  src='https://1.gravatar.com/avatar/cf7292487846085732baf808def5685a?s=32'></a></p>
+
 Docson
 ======
 
@@ -37,7 +38,7 @@ To include a Docson schema documentations on any page (wiki, ...) without worryi
 * Install Docson somewhere as described above.
 * Place the following `script` tags in the including page, nothing else is needed:
 
-```
+```html
 <script src="http://somewhere/path-to-docson/widget.js" data-schema="/path-to-schema">
 </script>
 ```
@@ -51,25 +52,26 @@ You can adapt [Swagger UI](https://github.com/wordnik/swagger-ui) to display Doc
 See how it looks like in the [Swagger Docson example](http://lbovet.github.io/swagger-ui/dist/index.html)
 
 In Swagger UI's `index.html`, include the [Swagger integration script after other script tags](https://github.com/lbovet/swagger-ui/blob/3f37722b03db6c48cc2a8460df26dda5f4d6f8e4/src/main/html/index.html#L19):
-```
+
+```html
   <script src='/path-to-docson/docson-swagger.js' type='text/javascript'></script>
 ```
 
 Also, you will need a patched version of [Swagger Client](https://github.com/lbovet/swagger-js/blob/models-exposed/lib/swagger.js) so that the raw json-schema model is visible from Docson. Either replace the `swagger.js` file in your Swagger UI disctribution or take it directly from github by replacing
 
-```
+```html
    <script src='/lib/swagger.js' type='text/javascript'></script>
 ```
 
 with 
 
-```
+```html
   <script src='https://raw2.github.com/lbovet/swagger-js/models-exposed/lib/swagger.js' type='text/javascript'></script>
 ```
 
 For a better layout of parameter models, you may [want to change the width of some elements](https://github.com/lbovet/swagger-ui/blob/3f37722b03db6c48cc2a8460df26dda5f4d6f8e4/src/main/html/index.html#L20-L27):
 
-```
+```html
   <style>
       .swagger-ui-wrap {
           max-width: 1200px;
