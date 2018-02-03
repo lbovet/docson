@@ -433,7 +433,8 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 });
             };
 
-            var resolveRefsReentrant = function(schema){
+            var resolveRefsReentrant = function(schema, relPath){
+                if (relPath === undefined) {relPath = baseUrl}
                 traverse(schema).forEach(function(item) {
                     // Fix Swagger weird generation for array.
                     if(item && item.$ref == "array") {
@@ -481,7 +482,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                             //Local to this server, fetch relative
                             var segments = item.split("#");
                             refs[item] = null;
-                            var p = $.get(baseUrl + segments[0]).then(function(content) {
+                            var p = $.get(relPath + segments[0]).then(function(content) {
                                 if(typeof content != "object") {
                                     try {
                                         content = JSON.parse(content);
@@ -492,7 +493,8 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                 if(content) {
                                     refs[item] = content;
                                     renderBox();
-                                    resolveRefsReentrant(content);
+                                    var splitSegment = segments[0].split('/')
+                                    resolveRefsReentrant(content, relPath+splitSegment.slice(0, splitSegment.length-1).join('/')+"/");
                                 }
                             });
                         }
