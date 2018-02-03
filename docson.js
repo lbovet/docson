@@ -482,7 +482,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                             //Local to this server, fetch relative
                             var segments = item.split("#");
                             refs[item] = null;
-                            var p = $.get(baseUrl + segments[0]).then(function(content) {
+                            var p = $.get(relPath + segments[0]).then(function(content) {
                                 if(typeof content != "object") {
                                     try {
                                         content = JSON.parse(content);
