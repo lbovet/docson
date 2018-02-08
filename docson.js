@@ -28,6 +28,13 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
     var boxes=[];
     var requests = {};
 
+    function get_document(url) {
+        if( !request[url] ) {
+            requests[url] = $.get(url);
+        }
+        return request[url];
+    }
+
     Handlebars.registerHelper('scope', function(schema, options) {
         var result;
         boxes.push([]);
@@ -443,8 +450,23 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                         item.type ="array";
                     }
 
+                    // not a $ref? we're done
+                    if(this.key !== "$ref") return;
+
+                    var segments = item.split('#');
+
+                    if( ! /^https?:\/\//.test(segment[0]) ) {
+                        segment[0] = relPath + segment[0];
+                    }
+
+                    get_document(segment[0]).then(function(schema) {
+                    })
+
+                    
                     // Fetch external schema
-                    if(this.key === "$ref") {
+//                        if( /Region/.test(item) ) { debugger }
+                        if( /UserName/.test(item) ) { debugger }
+
                         var external = false;
                         //Local meaning local to this server, but not in this file.
                         var local = false;
@@ -465,7 +487,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                             var segments = item.split("#");
                             refs[item] = null;
                             var url = segments[0];
-                            var request = requests[url] = requests[url] || $.get(url);
+                            var request = get_document(url);
                             var p = request.then(function(content) {
                                 if(typeof content != "object") {
                                     try {
@@ -475,6 +497,9 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                     }
                                 }
                                 if(content) {
+                                    debugger;
+                                    refs[item] = segments.length == 1 ? content
+                                                : jsonpointer.get(content, segments[1]);
                                     refs[item] = jsonpointer.get(content, segments[1]);
                                     renderBox();
                                     resolveRefsReentrant(content); 
@@ -486,7 +511,7 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                             var segments = item.split("#");
                             refs[item] = null;
                             var url = relPath + segments[0];
-                            var request = requests[url] = requests[url] || $.get(url);
+                            var request = get_document(url);
                             var p = request.then(function(content) {
                                 if(typeof content != "object") {
                                     try {
@@ -496,14 +521,15 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                     }
                                 }
                                 if(content) {
-                                    refs[item] = jsonpointer.get(content, segments[1]);
+                                    debugger;
+                                    refs[item] = segments.length == 1 ? content
+                                                : jsonpointer.get(content, segments[1]);
                                     renderBox();
                                     var splitSegment = segments[0].split('/')
                                     resolveRefsReentrant(content, relPath+splitSegment.slice(0, splitSegment.length-1).join('/')+"/");
                                 }
                             });
                         }
-                    }
                 });
             };
             
