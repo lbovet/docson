@@ -34,4 +34,16 @@ module.exports = {
     browser.end();
   },
 
+  'recursive schemas': function(browser) {
+    browser.url( rootUrl + "#/nightwatch/schemas/recursive/circle.json").pause(1000);
+
+    browser
+      .useXpath()
+      .expect
+      .element(c2x('.desc:contains("circular reference")'))
+      .present;
+
+    browser.end();
+  },
+
 };
