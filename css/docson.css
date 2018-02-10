@@ -23,6 +23,7 @@
 .docson .box {
     position: relative;
     float: left;
+    width:100%;
     background-color:rgba(255, 255, 255, 0.2);
     border: 1px solid lightgrey;
     border-radius: 4px;
@@ -79,6 +80,7 @@
     color: darkblue;
     padding: 5px 40px 2px 3px;
     float: left;
+    width:100%;
 }
 
 .docson .title {
@@ -93,7 +95,7 @@
 .docson .box-description {
     color: dimgray;
     float: left;
-    max-width: 600px;
+    width:100%;
 }
 
 .docson .end {
@@ -171,6 +173,7 @@
 
 .docson .property-name {
     float: left;
+    width:100%;
     font-family: "Lucida Console", Monaco, monospace;
     min-width: 130px;
 }
@@ -204,8 +207,8 @@
 .docson .signature-type {
     padding-left: 6px;
     float: left;
+    width:100%;
     min-width: 160px;
-    max-width: 320px;
 }
 
 .docson .signature-type-any {
@@ -283,7 +286,7 @@
     padding-bottom: 3px;
     color: dimgray;
     float: left;
-    max-width: 600px;
+    width:100%;
 }
 
 .docson .signature-box-container {
@@ -292,6 +295,7 @@
 
 .docson .box-container {
     float: left;
+    width:100%;
     padding-top: 4px;
     padding-left: 8px;
     display: none;
