@@ -18,7 +18,9 @@ var docson = docson || {};
 
 docson.templateBaseUrl="templates";
 
-define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib/marked", "lib/traverse"], function(jquery, handlebars, highlight, jsonpointer, marked) {
+define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib/marked", 
+    "lib/URI",
+    "lib/traverse"], function(jquery, handlebars, highlight, jsonpointer, marked, URI) {
 
     var ready = $.Deferred();
     var boxTemplate;
@@ -26,14 +28,33 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
     var source;
     var stack = [];
     var boxes=[];
-    var requests = {};
+
+    var schemaDocuments = {};
+
+    var resolveRefsReentrant;
 
     function get_document(url) {
-        if( !request[url] ) {
-            requests[url] = $.get(url);
+        if( !schemaDocuments[url] ) {
+            schemaDocuments[url] = $.get(url).then(function(content){
+                if(typeof content != "object") {
+                    try {
+                        content = JSON.parse(content);
+                    } catch(e) {
+                        console.error("Unable to parse "+segments[0], e);
+                        content = {};
+                    }
+                }
+                return content;
+            });
+
+            schemaDocuments[url].then(function(schema){
+                resolveRefsReentrant(schema, url );
+            })
         }
-        return request[url];
+        return schemaDocuments[url];
     }
+
+
 
     Handlebars.registerHelper('scope', function(schema, options) {
         var result;
@@ -342,10 +363,16 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
             }
 
             var refsPromise = $.Deferred().resolve().promise();
+
+            var renderBox;
             var refs = {};
+            var get_ref = function(uri) {
+                get_document( uri.clone().hash('').toString() ).then(function(schema){
+                    refs[uri.toString()] = uri.hash() ? jsonpointer.get( schema, uri.hash() ) : schema;
+                }).then(function(){ renderBox() });
+            };
 
-
-            var renderBox = function() {
+            renderBox = function() {
                 stack.push(refs);
                 var target = schema;
                 if(ref) {
@@ -441,17 +468,39 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 });
             };
 
-            var resolveRefsReentrant = function(schema, relPath){
-                if (relPath === undefined) {relPath = baseUrl}
-                traverse(schema).forEach(function(item) {
-                    // Fix Swagger weird generation for array.
-                    if(item && item.$ref == "array") {
-                        delete item.$ref;
-                        item.type ="array";
+            var resolveSchemaRef = function( parentObject, item, baseUrl ) {
+                    // not a $ref? we're done
+                    if( parentObject.key !== "$ref") return;
+
+                    if ( typeof baseUrl === 'string' ) {
+                        baseUrl = new URI( baseUrl );
                     }
 
-                    // not a $ref? we're done
-                    if(this.key !== "$ref") return;
+
+                    var uri = new URI( item );
+
+                    // ah, it's a relative url
+                    if( ! uri.host() ) {
+                        if ( uri.path() ) {
+                            if( uri.path()[0] !== '/' ) { // relative path
+                                var dir = [ baseUrl.directory(), uri.path() ].join('/');
+                                uri.path(dir);
+                            }
+                        }
+                        else {
+                            uri = baseUrl.clone().hash( uri.hash() );
+                        }
+                    }
+
+                    uri.normalize();
+
+                    // use the normalized uri
+                    parentObject.update( uri.toString() );
+
+                    get_ref( uri );
+
+                    return;
+
 
                     var segments = item.split('#');
 
@@ -464,8 +513,6 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
 
                     
                     // Fetch external schema
-//                        if( /Region/.test(item) ) { debugger }
-                        if( /UserName/.test(item) ) { debugger }
 
                         var external = false;
                         //Local meaning local to this server, but not in this file.
@@ -497,7 +544,6 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                     }
                                 }
                                 if(content) {
-                                    debugger;
                                     refs[item] = segments.length == 1 ? content
                                                 : jsonpointer.get(content, segments[1]);
                                     refs[item] = jsonpointer.get(content, segments[1]);
@@ -521,7 +567,6 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                     }
                                 }
                                 if(content) {
-                                    debugger;
                                     refs[item] = segments.length == 1 ? content
                                                 : jsonpointer.get(content, segments[1]);
                                     renderBox();
@@ -530,6 +575,22 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                                 }
                             });
                         }
+            }
+
+            resolveRefsReentrant = function(schema, relPath){
+                if (relPath === undefined) {
+                   relPath = new URI(baseUrl);
+                }
+
+                traverse(schema).forEach(function(item) {
+                    // Fix Swagger weird generation for array.
+                    if(item && item.$ref == "array") {
+                        delete item.$ref;
+                        item.type ="array";
+                    }
+
+                    resolveSchemaRef( this, item, relPath );
+
                 });
             };
             
