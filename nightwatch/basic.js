@@ -55,6 +55,14 @@ module.exports = {
       .element(c2x('.desc:contains("circular reference")'))
       .present;
 
+    browser.url( rootUrl + "#/nightwatch/schemas/recursive/within_schema.json").pause(1000);
+
+    browser
+      .useXpath()
+      .expect
+      .element(c2x('.desc:contains("circular definitions")'))
+      .present;
+
     browser.end();
   },
 
