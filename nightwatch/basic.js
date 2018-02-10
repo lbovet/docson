@@ -34,6 +34,18 @@ module.exports = {
     browser.end();
   },
 
+  'local schema, absolute path': function(browser) {
+    browser.url( rootUrl + "#/nightwatch/schemas/local-absolute/main.json").pause(1000);
+
+    browser
+      .useXpath()
+      .expect
+      .element(c2x('.desc:contains("a foo number")'))
+      .present;
+
+    browser.end();
+  },
+
   'recursive schemas': function(browser) {
     browser.url( rootUrl + "#/nightwatch/schemas/recursive/circle.json").pause(1000);
 
