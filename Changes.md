@@ -1,6 +1,6 @@
 # Revision history for docson
 
-## NEXT
+## v1.1.0
 
 ### Enhancements
 
