@@ -18,9 +18,15 @@ var docson = docson || {};
 
 docson.templateBaseUrl="templates";
 
-define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib/marked", 
-    "lib/URI",
-    "lib/traverse"], function(jquery, handlebars, highlight, jsonpointer, marked, URI) {
+import $ from 'jquery';
+
+const Handlebars  = require('handlebars/dist/handlebars');
+import jsonpointer from 'jsonpointer.js';
+import marked from 'marked';
+import URI from 'urijs';
+import traverse from 'traverse';
+
+const highlight = false;
 
     var ready = $.Deferred();
     var boxTemplate;
@@ -602,5 +608,4 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
         return d.promise();
     }
 
-    return docson;
-});
+export default docson;

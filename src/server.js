@@ -14,6 +14,7 @@ app.get(/\.json$/, function (req, res, next) {
 });
 
 app.use( '/docson', express.static( rootDir + '/public' ) );
+app.use( '/docson', express.static( rootDir + '/dist' ) );
 
 app.use('/', 
     serveIndex(rootDir, {
