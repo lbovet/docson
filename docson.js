@@ -401,6 +401,11 @@ define(["lib/jquery", "lib/handlebars", "lib/highlight", "lib/jsonpointer", "lib
                 element.get(0).resized = resized;
                 resized();
 
+                // For usage of $$expand via embed, where height can get stuck initially
+                for(var waitMs in [100, 500, 1000, 2000, 5000]) {
+                    setTimeout(resized, waitMs);
+                }
+
                 if(highlight) {
                     element.find(".json-schema").each(function(k, schemaElement) {
                         highlight.highlightSchema(schemaElement);
