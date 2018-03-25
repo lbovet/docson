@@ -2,6 +2,7 @@
 
 ## NEXT
 
+* NPMize the project. [GH#38]
 * Add 'docson' cli program. [GH#62]
 
 
