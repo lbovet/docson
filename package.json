@@ -7,9 +7,7 @@
     "example": "examples",
     "test": "tests"
   },
-  "bin": {
-    "docson": "./src/docson-cli.js"
-  },
+  "bin": "./src/docson-cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublish": "require-self"

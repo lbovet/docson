@@ -1,28 +1,30 @@
 const express    = require('express');
 const path       = require('path');
-const app        = express();
 const serveIndex = require('serve-index');
 
-app.use(express.static('files'))
+module.exports = function(options) {
+    const app        = express();
 
-let rootDir = path.join( __dirname, '..' );
+    app.use(express.static('files'))
 
-app.get(/\.json$/, function (req, res, next) {
-    if ( req.xhr ) return next();
+    let docsonRootDir = path.join( __dirname, '..' );
 
-    res.redirect('/docson/#' + req.path);
-});
+    app.use( '/docson', express.static( docsonRootDir + '/public' ) );
+    app.use( '/docson', express.static( docsonRootDir + '/dist' ) );
 
-app.use( '/docson', express.static( rootDir + '/public' ) );
-app.use( '/docson', express.static( rootDir + '/dist' ) );
+    app.get(/\.json$/, function (req, res, next) {
+        if ( req.xhr ) return next();
 
-app.use('/', 
-    serveIndex(rootDir, {
-        'icons': true,
-        //       filter: filename => /\.json$/.test(filename)
-    }),
-    express.static( rootDir )
-);
+        res.redirect('/docson/#' + req.path);
+    });
 
+    app.use('/', 
+        serveIndex(options.directory, {
+            'icons': true,
+            //       filter: filename => /\.json$/.test(filename)
+        }),
+        express.static( options.directory )
+    );
 
-module.exports = app;
+    return app;
+};
