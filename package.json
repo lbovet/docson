@@ -1,0 +1,50 @@
+{
+  "name": "docson",
+  "version": "1.0.2",
+  "description": "Documentation for your JSON types",
+  "main": "docson.js",
+  "directories": {
+    "example": "examples",
+    "test": "tests"
+  },
+  "bin": "./src/docson-cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "require-self"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rom1504/docson/tree/npm"
+  },
+  "keywords": [
+    "json",
+    "schema",
+    "documentation"
+  ],
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
+  },
+  "author": "Laurent Bovet",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/lbovet/docson/issues"
+  },
+  "homepage": "https://github.com/lbovet/docson#readme",
+  "devDependencies": {
+    "brfs": "^1.4.3",
+    "require-self": "^0.1.0",
+    "webpack": "^3.11.0"
+  },
+  "dependencies": {
+    "handlebars": "^4.0.11",
+    "jquery": "^2.2.4",
+    "jsonpointer": "^4.0.1",
+    "jsonpointer.js": "^0.4.0",
+    "marked": "^0.3.14",
+    "serve-index": "^1.9.1",
+    "traverse": "^0.6.6",
+    "urijs": "^1.19.1"
+  }
+}

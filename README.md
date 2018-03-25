@@ -18,6 +18,16 @@ Give Docson a JSON schema and it will generate a [beautiful documentation](http:
 
 ## Usage
 
+### Via cli tool
+
+    $ docson -d ./schemas/
+    server ready and running at localhost:3000
+
+    # and then...
+    firefox http://localhost:3000/schemas/ship.json
+
+### Add to a webpage
+
 * Open [index.html](http://lbovet.github.io/docson/index.html) and enter the schema path in the form field.
 * Or give the schema path directly as hash parameter: [index.html#/docson/examples/example.json](http://lbovet.github.io/docson/index.html#/docson/examples/example.json)
 
