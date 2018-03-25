@@ -1,5 +1,11 @@
 # Revision history for docson
 
+## NEXT
+
+* Add 'docson' cli program. [GH#62]
+
+
+
 ## v1.1.0
 
 ### Enhancements
