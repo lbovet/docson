@@ -22,14 +22,13 @@ if (script.attributes["data-schema"]) {
     if (script.attributes["data-docson"]) {
         docson = script.attributes["data-docson"].value;
     } else {
-        docson = script.src.replace("widget.js", "index.html");
+        docson = script.src.replace("js/widget.js", "index.html");
     }
-    document.write("<iframe id='" + script.attributes["data-schema"].value +
+    document.write("<iframe class='docson-widget' id='" + script.attributes["data-schema"].value +
         "' style='padding: 0; border: 0; width:100%; background: transparent' src='" +
         docson + "#" +
         script.attributes["data-schema"].value + "'></iframe>");
     function receiveMessage(event) {
-        console.log("<", event)
         if (event.data.id && event.data.id == "docson") {
           var frame = document.getElementById(event.data.url);
           if(event.data.action == "resized") {
