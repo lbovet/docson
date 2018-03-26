@@ -1,5 +1,5 @@
 const c2x = require( 'css2xpath' );
-let static_app = require( '../src/server' )({ directory: '.' });
+let static_app = require( 'src/server' )({ directory: '.' });
 let server;
 
 const rootUrl = "http://localhost:3000/public/index.html";
