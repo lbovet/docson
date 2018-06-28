@@ -25,7 +25,7 @@ afterAll( async () => {
 test( 'basic', async () => {
     const page = await ( await browser ).newPage();
 
-    await page.goto(  rootUrl + '/nightwatch/widget/basic.html' );
+    await page.goto(  rootUrl + '/integration/widget/basic.html' );
 
     await page.waitForSelector('iframe');
 

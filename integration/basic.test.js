@@ -23,9 +23,8 @@ afterAll( async () => {
 test( 'relative paths', async () => {
     const page = await ( await browser ).newPage();
 
-    await page.goto( rootUrl + "#/nightwatch/schemas/relative.json");
+    await page.goto( rootUrl + "#/integration/schemas/relative.json");
     
-    await page.waitForSelector(".signature-description");
 
     let text = await page.evaluate( () => document.querySelector('p').innerText );
 
@@ -38,7 +37,7 @@ test( 'relative paths', async () => {
 test('resolve #definitions in non-root schema', async () => {
     const page = await ( await browser ).newPage();
 
-    await page.goto( rootUrl + "#/nightwatch/schemas/def-non-root/User.json");
+    await page.goto( rootUrl + "#/integration/schemas/def-non-root/User.json");
 
     await page.waitFor(1000);
     
@@ -53,7 +52,7 @@ test('resolve #definitions in non-root schema', async () => {
 test('local schema, absolute path', async () =>  {
     const page = await ( await browser ).newPage();
 
-    await page.goto( rootUrl + "#/nightwatch/schemas/local-absolute/main.json");
+    await page.goto( rootUrl + "#/integration/schemas/local-absolute/main.json");
 
     await page.waitFor(1000);
     
@@ -68,7 +67,7 @@ test('local schema, absolute path', async () =>  {
 test('recursive schemas', async () => {
     const page = await ( await browser ).newPage();
 
-    await page.goto( rootUrl + "#/nightwatch/schemas/recursive/circle.json");
+    await page.goto( rootUrl + "#/integration/schemas/recursive/circle.json");
 
     await page.waitFor(1000);
 
@@ -83,7 +82,7 @@ test('recursive schemas', async () => {
 test('recursive schemas, part II', async () => {
     const page = await ( await browser ).newPage();
 
-    await page.goto( rootUrl + "#/nightwatch/schemas/recursive/within_schema.json");
+    await page.goto( rootUrl + "#/integration/schemas/recursive/within_schema.json");
     await page.waitFor(1000);
 
     let results = await
