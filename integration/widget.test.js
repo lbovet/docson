@@ -5,15 +5,15 @@ const puppeteer = require('puppeteer')
 
 const rootUrl = "http://localhost:3000/";
 
+jest.setTimeout(500000);
+
 const server = new Promise( resolve => {
-    let app = express();
-    let rootDir = path.join( __dirname, '..' );
-    app.use( '/', express.static( rootDir ) );
+    let app = require( '../src/server' )({ directory: path.join( __dirname, '..' ) });
     let server;
     server = app.listen( 3000, () => resolve(server) );
-});
+}).catch( e => console.log(e) );
 
-const browser = puppeteer.launch({ headless: false });
+const browser = puppeteer.launch({ headless: true });
 
 beforeAll( async () => { await server; await browser }, 10000 );
 afterAll( async () => { 
@@ -30,6 +30,8 @@ test( 'basic', async () => {
     await page.waitForSelector('iframe');
 
     let frames = await page.frames();
+
+    await page.waitFor(2000);
 
     let title = await frames[1].evaluate( 
         () => document.querySelector('.title').innerText 

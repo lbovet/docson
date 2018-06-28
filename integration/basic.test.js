@@ -1,8 +1,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 
-
-jest.setTimeout(100000);
+jest.setTimeout(500000);
 
 const server = new Promise( resolve => {
     let app = require( '../src/server' )({ directory: path.join( __dirname, '..' ) });
@@ -10,11 +9,11 @@ const server = new Promise( resolve => {
     server = app.listen( 3000, () => resolve(server) );
 }).catch( e => console.log(e) );
 
-const browser = puppeteer.launch({ headless: false });
+const browser = puppeteer.launch({ headless: true });
 
 const rootUrl = "http://localhost:3000/public/index.html";
 
-beforeAll( async () => { await server }, 10000 );
+beforeAll( async () => { await server }, 50000 );
 afterAll( async () => { 
     ( await server ).close();
     ( await browser ).close(); 
@@ -25,10 +24,12 @@ test( 'relative paths', async () => {
 
     await page.goto( rootUrl + "#/integration/schemas/relative.json");
     
+    await page.waitFor('//*[@id="doc"]/div[1]/div[3]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[1]/div[3]/p');
 
     let text = await page.evaluate( () => document.querySelector('p').innerText );
 
     expect(text).toMatch( 'a baz string' );
+
 
     await page.close();
 
@@ -39,7 +40,7 @@ test('resolve #definitions in non-root schema', async () => {
 
     await page.goto( rootUrl + "#/integration/schemas/def-non-root/User.json");
 
-    await page.waitFor(1000);
+    await page.waitFor(5000);
     
     await expect( 
         page.evaluate( () => Array.from(document.querySelectorAll('.property-name').values()).map( s => s.innerText ) )
@@ -54,7 +55,7 @@ test('local schema, absolute path', async () =>  {
 
     await page.goto( rootUrl + "#/integration/schemas/local-absolute/main.json");
 
-    await page.waitFor(1000);
+    await page.waitFor(5000);
     
     await expect( 
         page.evaluate( () => Array.from(document.querySelectorAll('.desc').values()).map( s => s.innerText ) )
@@ -69,7 +70,7 @@ test('recursive schemas', async () => {
 
     await page.goto( rootUrl + "#/integration/schemas/recursive/circle.json");
 
-    await page.waitFor(1000);
+    await page.waitFor(5000);
 
     await expect( 
         page.evaluate( () => Array.from(document.querySelectorAll('.desc').values()).map( s => s.innerText ) )
@@ -83,7 +84,7 @@ test('recursive schemas, part II', async () => {
     const page = await ( await browser ).newPage();
 
     await page.goto( rootUrl + "#/integration/schemas/recursive/within_schema.json");
-    await page.waitFor(1000);
+    await page.waitFor(5000);
 
     let results = await
         page.evaluate( () => Array.from(document.querySelectorAll('p').values()).map( s => s.innerText ) );
