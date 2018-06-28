@@ -91,3 +91,15 @@ test('recursive schemas, part II', async () => {
 
     expect(results).toContain( 'circular definitions' );
 });
+
+test('pretty big schema', async () => {
+    const page = await ( await browser ).newPage();
+
+    await page.goto( rootUrl + "#/integration/schemas/release-schema.json");
+    await page.waitFor( '//*[@id="doc"]/div[1]/div[3]/div[12]/div[2]/div/div[1]/div[3]/div[11]/div[1]/div[3]/p');
+
+    let results = await
+        page.evaluate( () => Array.from(document.querySelectorAll('p').values()).map( s => s.innerText ) );
+
+    expect(results).toContain( 'All documents and attachments related to the contract, including any notices.' );
+});
