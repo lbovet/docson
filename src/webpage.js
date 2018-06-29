@@ -27,7 +27,7 @@ import docson from './index';
                         if(segments[0]) {
                             function render(schema) {
                                 try {
-                                    docson.doc("doc", schema, segments[1], segments[0]).done(function() {
+                                    docson.doc("doc", schema, segments[1], segments[0]).then(function() {
                                         maybeExpand(segments);
                                     });
                                 } catch (e) {

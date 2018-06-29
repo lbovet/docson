@@ -19,6 +19,7 @@ var docson = docson || {};
 docson.templateBaseUrl="templates";
 
 import $ from 'jquery';
+import _ from 'lodash';
 
 const Handlebars  = require('handlebars/dist/handlebars');
 import jsonpointer from 'jsonpointer.js';
@@ -26,9 +27,16 @@ import marked from 'marked';
 import URI from 'urijs';
 import traverse from 'traverse';
 
+const debug = require('debug')('docson');
+
 const highlight = false;
 
-    var ready = $.Deferred();
+    var resolve_ready;
+    var ready = new Promise( (resolve,reject) => {
+        debug( 'promise A' );
+        resolve_ready = resolve;
+    });
+
     var boxTemplate;
     var signatureTemplate;
     var source;
@@ -345,22 +353,30 @@ const highlight = false;
     });
 
     function init() {
-        $.when( $.get(docson.templateBaseUrl+"/box.html").done(function(content) {
+        $.get(docson.templateBaseUrl+"/box.html").done(function(content) {
             source = content
             boxTemplate = Handlebars.compile(source);
-        }), $.get(docson.templateBaseUrl+"/signature.html").done(function(content) {
-            source = content
-            signatureTemplate = Handlebars.compile(source);
-        })).always(function() {
-            ready.resolve();
+
+            $.get(docson.templateBaseUrl+"/signature.html").done(function(content) {
+                source = content
+                signatureTemplate = Handlebars.compile(source);
+
+                resolve_ready();
+            });
         });
     };
 
     docson.doc = function(element, schema, ref, baseUrl) {
-        var d = $.Deferred();
+        var resolve_d;
+        var d = new Promise( resolve => {
+            debug( 'Promise B' );
+            resolve_d = resolve ;
+        });
         if(baseUrl === undefined) baseUrl='';
         init();
-        ready.done(function() {
+        var renderBox;
+        var throttled_render = _.throttle( () => renderBox(), 1000 );
+        ready.then(function() {
             if(typeof element == "string") {
                 element = $("#"+element);
             }
@@ -368,17 +384,20 @@ const highlight = false;
                 schema = JSON.parse(schema);
             }
 
-            var refsPromise = $.Deferred().resolve().promise();
-
-            var renderBox;
             var refs = {};
             var get_ref = function(uri) {
-                get_document( uri.clone().hash('').toString() ).then(function(schema){
+                return new Promise( resolve => {
+                    get_document( uri.clone().hash('').toString() ).then(function(schema){
                     refs[uri.toString()] = uri.hash() ? jsonpointer.get( schema, uri.hash() ) : schema;
-                }).then(function(){ renderBox() });
+                }).then(function(){ 
+                    debug('get_ref');
+                    resolve();
+                });
+                });
             };
 
             renderBox = function() {
+                debug('render');
                 stack.push(refs);
                 var target = schema;
                 if(ref) {
@@ -475,8 +494,11 @@ const highlight = false;
             };
 
             var resolveSchemaRef = function( parentObject, item, baseUrl ) {
+                debug('resolveSchemaRef', parentObject, item, baseUrl);
+
+                return new Promise( ( resolve, reject ) => {
                     // not a $ref? we're done
-                    if( parentObject.key !== "$ref") return;
+                    if( parentObject.key !== "$ref") return resolve();
 
                     if ( typeof baseUrl === 'string' ) {
                         baseUrl = new URI( baseUrl );
@@ -503,90 +525,21 @@ const highlight = false;
                     // use the normalized uri
                     parentObject.update( uri.toString() );
 
-                    get_ref( uri );
-
-                    return;
-
-
-                    var segments = item.split('#');
-
-                    if( ! /^https?:\/\//.test(segment[0]) ) {
-                        segment[0] = relPath + segment[0];
-                    }
-
-                    get_document(segment[0]).then(function(schema) {
-                    })
-
-                    
-                    // Fetch external schema
-
-                        var external = false;
-                        //Local meaning local to this server, but not in this file.
-                        var local = false;
-                        if((/^https?:\/\//).test(item)) {
-                            external = true;
-                        }
-                        else if((/^[^#]/).test(item)) {
-                            local = true;
-                        } else if(item.indexOf('#') > 0) {
-                            //Internal reference
-                            //Turning relative refs to absolute ones
-                            external = true;
-                            item = baseUrl + item;
-                            this.update(item);
-                        }
-                        if(external){
-                            //External reference, fetch it.
-                            var segments = item.split("#");
-                            refs[item] = null;
-                            var url = segments[0];
-                            var request = get_document(url);
-                            var p = request.then(function(content) {
-                                if(typeof content != "object") {
-                                    try {
-                                        content = JSON.parse(content);
-                                    } catch(e) {
-                                        console.error("Unable to parse "+segments[0], e);
-                                    }
-                                }
-                                if(content) {
-                                    refs[item] = segments.length == 1 ? content
-                                                : jsonpointer.get(content, segments[1]);
-                                    refs[item] = jsonpointer.get(content, segments[1]);
-                                    renderBox();
-                                    resolveRefsReentrant(content); 
-                                }
-                            });
-                        }
-                        else if(local) {
-                            //Local to this server, fetch relative
-                            var segments = item.split("#");
-                            refs[item] = null;
-                            var url = relPath + segments[0];
-                            var request = get_document(url);
-                            var p = request.then(function(content) {
-                                if(typeof content != "object") {
-                                    try {
-                                        content = JSON.parse(content);
-                                    } catch(e) {
-                                        console.error("Unable to parse "+segments[0], e);
-                                    }
-                                }
-                                if(content) {
-                                    refs[item] = segments.length == 1 ? content
-                                                : jsonpointer.get(content, segments[1]);
-                                    renderBox();
-                                    var splitSegment = segments[0].split('/')
-                                    resolveRefsReentrant(content, relPath+splitSegment.slice(0, splitSegment.length-1).join('/')+"/");
-                                }
-                            });
-                        }
+                    debug(get_ref(uri));
+                    get_ref( uri ).finally( () => {
+                        throttled_render();
+                        resolve();
+                    });
+                });
             }
 
             resolveRefsReentrant = function(schema, relPath){
+                debug( 'resolveRefsReentrant' );
                 if (relPath === undefined) {
                    relPath = new URI(baseUrl);
                 }
+
+                let p = [];
 
                 traverse(schema).forEach(function(item) {
                     // Fix Swagger weird generation for array.
@@ -595,17 +548,15 @@ const highlight = false;
                         item.type ="array";
                     }
 
-                    resolveSchemaRef( this, item, relPath );
-
+                    p.push( resolveSchemaRef( this, item, relPath ) );
                 });
+
+                return Promise.all(p).finally();
             };
             
-            resolveRefsReentrant(schema);
-            renderBox();
-            
-            d.resolve();
+            resolveRefsReentrant(schema).finally( throttled_render ).then( resolve_d ).catch( e => console.log('oops', e )  );
         })
-        return d.promise();
+        return d.finally( throttled_render );
     }
 
 export default docson;

@@ -39,15 +39,24 @@
     "webpack": "^3.11.0"
   },
   "dependencies": {
+    "babel-loader": "^7.1.4",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "commander": "^2.15.1",
+    "debug": "^3.1.0",
     "express": "^4.16.3",
     "handlebars": "^4.0.11",
     "jquery": "^2.2.4",
     "jsonpointer": "^4.0.1",
     "jsonpointer.js": "^0.4.0",
+    "lodash": "^4.17.10",
     "marked": "^0.3.14",
     "serve-index": "^1.9.1",
     "traverse": "^0.6.6",
     "urijs": "^1.19.1"
+  },
+  "optionalDependencies": {
+    "jest": "^23.2.0",
+    "puppeteer": "^1.5.0"
   }
 }
