@@ -1,0 +1,7 @@
+{
+    "type": "object",
+    "properties": {
+        "foo": { "$ref": "/integration/schemas/local-absolute/foo.json" }
+    }
+}
+

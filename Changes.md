@@ -1,5 +1,12 @@
 # Revision history for docson
 
+## NEXT
+
+* NPMize the project. [GH#38]
+* Add 'docson' cli program. [GH#62]
+
+
+
 ## v1.1.0
 
 ### Enhancements

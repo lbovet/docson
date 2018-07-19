@@ -18,6 +18,27 @@ Give Docson a JSON schema and it will generate a [beautiful documentation](http:
 
 ## Usage
 
+### Via cli tool
+
+    $ docson -d ./schemas/
+    server ready and running at localhost:3000
+
+    # and then...
+    firefox http://localhost:3000/schemas/ship.json
+
+### As a webpage widget
+
+To include a Docson schema documentations on any page (wiki, ...) without worrying about messing up with javascript libraries and cross-origin issues:
+
+* Install Docson somewhere as described above.
+* Place the following `script` tags in the including page, nothing else is needed:
+
+    <script src="http://somewhere/path-to-docson/public/js/widget.js" data-schema="/path-to/schema.json">
+    </script>
+
+
+### Add to a webpage
+
 * Open [index.html](http://lbovet.github.io/docson/index.html) and enter the schema path in the form field.
 * Or give the schema path directly as hash parameter: [index.html#/docson/examples/example.json](http://lbovet.github.io/docson/index.html#/docson/examples/example.json)
 
@@ -31,19 +52,6 @@ For example, [index.html#/typson/example/invoice/line.ts$InvoiceLine](http://lbo
 
 You need to install [Typson](https://github.com/lbovet/typson) by yourself on your server. It must be in a directory named `typson` located at the same level as the `docson` directory.
 
-## Widget
-
-To include a Docson schema documentations on any page (wiki, ...) without worrying about messing up with javascript libraries and cross-origin issues:
-
-* Install Docson somewhere as described above.
-* Place the following `script` tags in the including page, nothing else is needed:
-
-```html
-<script src="http://somewhere/path-to-docson/widget.js" data-schema="/path-to-schema">
-</script>
-```
-
-See the [widget example](http://jsfiddle.net/3kXu2/3/) on jsfiddle.
 
 ## Swagger
 

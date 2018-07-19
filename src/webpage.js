@@ -1,27 +1,8 @@
-<!DOCTYPE html>
-<!--
-  ~ Copyright 2013 Laurent Bovet <laurent.bovet@windmaster.ch>
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-<html>
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="css/docson.css">
-    <script src="lib/require.js"></script>
-    <script>
-        require(["docson", "lib/jquery"], function(docson) {
-            $(function () {
+// script for the generic page
+
+const $ = require('jquery');
+import docson from './index';
+
                 var embedded = window.parent !== window;
                 if (embedded) {
                     $("body").addClass("embedded");
@@ -46,7 +27,7 @@
                         if(segments[0]) {
                             function render(schema) {
                                 try {
-                                    docson.doc("doc", schema, segments[1], segments[0]).done(function() {
+                                    docson.doc("doc", schema, segments[1], segments[0]).then(function() {
                                         maybeExpand(segments);
                                     });
                                 } catch (e) {
@@ -55,10 +36,11 @@
                             }
 
                             if(/\.ts$/.test(segments[0])) {
-                                require.config( { baseUrl: "../typson" } );
-                                require(["lib/typson-schema"], function(typson) {
-                                    typson.definitions(segments[0]).done(render);
-                                });
+                                // TODO
+                                // require.config( { baseUrl: "../typson" } );
+                                // require(["lib/typson-schema"], function(typson) {
+                                //     typson.definitions(segments[0]).done(render);
+                                // });
                             } else {
                                 $.get(segments[0])
                                         .done(render)
@@ -120,35 +102,3 @@
                         window.parent.postMessage( { id: "docson", action: "resized", url: url, width: width, height: height}, "*");
                     }
                 }
-            });
-        });
-    </script>
-    <style>
-        body {
-            font-family: verdana, helvetica;
-        }
-
-        #form {
-            display: none;
-        }
-
-        #form input[type=text] {
-            border-radius: 6px;
-            -moz-border-radius: 6px;
-            -webkit-border-radius: 6px;
-        }
-
-        .embedded {
-            margin: 0px;
-            padding: 0px;
-        }
-    </style>
-</head>
-<body>
-<div id="form">
-    Please enter a schema URL:
-    <input type="text" id="url" size="60">
-</div>
-<div id="doc"></div>
-</body>
-</html>
