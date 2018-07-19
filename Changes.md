@@ -1,11 +1,9 @@
 # Revision history for docson
 
-## NEXT
+## v2.0.0 - 2018-07-18
 
 * NPMize the project. [GH#38]
 * Add 'docson' cli program. [GH#62]
-
-
 
 ## v1.1.0
 
