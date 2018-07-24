@@ -1,21 +1,21 @@
 {
   "name": "docson",
-  "version": "1.0.2",
+  "version": "2.0.1",
   "description": "Documentation for your JSON types",
-  "main": "docson.js",
+  "main": "lib/index.js",
   "directories": {
     "example": "examples",
     "test": "tests"
   },
-  "bin": "./src/docson-cli.js",
+  "bin": "./lib/docson-cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "require-self",
+    "prepublish": "gotask build",
     "build-widget": "webpack"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rom1504/docson/tree/npm"
+    "url": "https://github.com/lbovet/docson"
   },
   "keywords": [
     "json",
@@ -34,14 +34,18 @@
   },
   "homepage": "https://github.com/lbovet/docson#readme",
   "devDependencies": {
-    "brfs": "^1.4.3",
-    "require-self": "^0.1.0",
-    "webpack": "^3.11.0"
-  },
-  "dependencies": {
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "jest": "^23.2.0",
+    "puppeteer": "^1.5.0",
+    "webpack": "^3.11.0"
+  },
+  "dependencies": {
     "commander": "^2.15.1",
     "debug": "^3.1.0",
     "express": "^4.16.3",
@@ -56,7 +60,5 @@
     "urijs": "^1.19.1"
   },
   "optionalDependencies": {
-    "jest": "^23.2.0",
-    "puppeteer": "^1.5.0"
   }
 }

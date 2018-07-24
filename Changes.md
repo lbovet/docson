@@ -1,4 +1,8 @@
-# Revision history for docson
+# Revision history for docson 
+
+## v2.0.1 - 2018-07-23
+
+* Release to npm.
 
 ## v2.0.0 - 2018-07-18
 
