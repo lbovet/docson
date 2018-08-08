@@ -33,7 +33,6 @@ const highlight = false;
 
     var resolve_ready;
     var ready = new Promise( (resolve,reject) => {
-        debug( 'promise A' );
         resolve_ready = resolve;
     });
 
@@ -94,9 +93,25 @@ const highlight = false;
 
     Handlebars.registerHelper('desc', function(schema) {
         var description = schema.description;
+        var examples = schema.examples;
 
-        if( !description ) return "";
-        var text = description;
+        var text = "";
+
+        if( !description && !examples ) {
+            return "";
+        }
+
+        if ( description ) {
+            text = description
+        }
+
+        if ( examples && examples.length > 0 ) {
+            text += "\n\n*Examples* \n";
+            examples.forEach( e => {
+                text += "\n\n```\n" + e + "\n```\n\n";
+            });
+        }
+
         if(marked) {
             marked.setOptions({gfm: true, breaks: true})
             return new Handlebars.SafeString(marked(text));
@@ -122,7 +137,7 @@ const highlight = false;
     });
 
     Handlebars.registerHelper('primitive', function(schema, options) {
-        if(schema.type && schema.type != "object" && schema.type != "array" || schema.enum) {
+        if(schema.type && schema.type != "object" && schema.type != "array" || schema.enum || schema.const) {
             return withType(this, options, true)
         }
     });
@@ -186,6 +201,9 @@ const highlight = false;
         schema.__type = schema.type;
         if(!schema.type && !hideAny) {
             schema.__type="any";
+        }
+        if (schema.const) {
+            schema.__type=schema.const;
         }
         if(schema.format) {
             schema.__type=schema.format;

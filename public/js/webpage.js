@@ -19894,7 +19894,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // script for the generic page
 
-var $ = __webpack_require__(327);
+const $ = __webpack_require__(327);
 
 
 var embedded = window.parent !== window;
@@ -19915,7 +19915,35 @@ update();
 var url;
 function update() {
     if (window.location.hash) {
-        var receiveMessage = function receiveMessage(event) {
+        $("#form").hide();
+        url = decodeURIComponent(window.location.hash.substring(1));
+        var segments = url.split("$");
+        if (segments[0]) {
+            function render(schema) {
+                try {
+                    _index2.default.doc("doc", schema, segments[1], segments[0]).then(function () {
+                        maybeExpand(segments);
+                    });
+                } catch (e) {
+                    error("Could not parse schema: " + e.message + "<pre>" + $('<pre/>').text(schema).html() + "</pre>");
+                }
+            }
+
+            if (/\.ts$/.test(segments[0])) {
+                // TODO
+                // require.config( { baseUrl: "../typson" } );
+                // require(["lib/typson-schema"], function(typson) {
+                //     typson.definitions(segments[0]).done(render);
+                // });
+            } else {
+                $.get(segments[0]).done(render).fail(function (xhr, status, err) {
+                    error("Could not load " + segments[0].replace(/[\u00A0-\u9999<>\&]/gim, function (i) {
+                        return '&#' + i.charCodeAt(0) + ';';
+                    }) + ": " + status + " " + err);
+                });
+            }
+        }
+        function receiveMessage(event) {
             console.log(">", event);
             if (event.data.id && event.data.id == "docson") {
                 if (event.data.type) {
@@ -19935,37 +19963,7 @@ function update() {
                     $("#doc").css("font-family", event.data.font);
                 }
             }
-        };
-
-        $("#form").hide();
-        url = decodeURIComponent(window.location.hash.substring(1));
-        var segments = url.split("$");
-        if (segments[0]) {
-            var render = function render(schema) {
-                try {
-                    _index2.default.doc("doc", schema, segments[1], segments[0]).then(function () {
-                        maybeExpand(segments);
-                    });
-                } catch (e) {
-                    error("Could not parse schema: " + e.message + "<pre>" + $('<pre/>').text(schema).html() + "</pre>");
-                }
-            };
-
-            if (/\.ts$/.test(segments[0])) {
-                // TODO
-                // require.config( { baseUrl: "../typson" } );
-                // require(["lib/typson-schema"], function(typson) {
-                //     typson.definitions(segments[0]).done(render);
-                // });
-            } else {
-                $.get(segments[0]).done(render).fail(function (xhr, status, err) {
-                    error("Could not load " + segments[0].replace(/[\u00A0-\u9999<>\&]/gim, function (i) {
-                        return '&#' + i.charCodeAt(0) + ';';
-                    }) + ": " + status + " " + err);
-                });
-            }
         }
-
         window.addEventListener("message", receiveMessage, false);
         var host = window.opener || window.parent;
         host.postMessage({ id: "docson", action: "ready", url: url }, "*");
@@ -20006,8 +20004,6 @@ if (embedded) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _jquery = __webpack_require__(327);
 
@@ -20055,16 +20051,15 @@ var docson = docson || {};
 
 docson.templateBaseUrl = "templates";
 
-var Handlebars = __webpack_require__(340);
+const Handlebars = __webpack_require__(340);
 
 
-var debug = __webpack_require__(341)('docson');
+const debug = __webpack_require__(341)('docson');
 
-var highlight = false;
+const highlight = false;
 
 var resolve_ready;
-var ready = new Promise(function (resolve, reject) {
-    debug('promise A');
+var ready = new Promise((resolve, reject) => {
     resolve_ready = resolve;
 });
 
@@ -20081,7 +20076,7 @@ var resolveRefsReentrant;
 function get_document(url) {
     if (!schemaDocuments[url]) {
         schemaDocuments[url] = _jquery2.default.get(url).then(function (content) {
-            if ((typeof content === 'undefined' ? 'undefined' : _typeof(content)) != "object") {
+            if (typeof content != "object") {
                 try {
                     content = JSON.parse(content);
                 } catch (e) {
@@ -20123,9 +20118,25 @@ Handlebars.registerHelper('source', function (schema) {
 
 Handlebars.registerHelper('desc', function (schema) {
     var description = schema.description;
+    var examples = schema.examples;
 
-    if (!description) return "";
-    var text = description;
+    var text = "";
+
+    if (!description && !examples) {
+        return "";
+    }
+
+    if (description) {
+        text = description;
+    }
+
+    if (examples && examples.length > 0) {
+        text += "\n\n*Examples* \n";
+        examples.forEach(e => {
+            text += "\n\n```\n" + e + "\n```\n\n";
+        });
+    }
+
     if (_marked2.default) {
         _marked2.default.setOptions({ gfm: true, breaks: true });
         return new Handlebars.SafeString((0, _marked2.default)(text));
@@ -20151,7 +20162,7 @@ Handlebars.registerHelper('contains', function (arr, item, options) {
 });
 
 Handlebars.registerHelper('primitive', function (schema, options) {
-    if (schema.type && schema.type != "object" && schema.type != "array" || schema.enum) {
+    if (schema.type && schema.type != "object" && schema.type != "array" || schema.enum || schema.const) {
         return withType(this, options, true);
     }
 });
@@ -20161,7 +20172,7 @@ Handlebars.registerHelper('exists', function (value, options) {
         value = value === null ? "null" : value;
         value = value === true ? "true" : value;
         value = value === false ? "false" : value;
-        value = (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === "object" ? JSON.stringify(value) : value;
+        value = typeof value === "object" ? JSON.stringify(value) : value;
         this.__default = value;
         var result = options.fn(this);
         delete this.__default;
@@ -20183,7 +20194,7 @@ Handlebars.registerHelper('range', function (from, to, replFrom, replTo, exclFro
     }
 });
 
-var sub = function sub(schema) {
+var sub = function (schema) {
     return schema.type == "array" || schema.allOf || schema.anyOf || schema.oneOf || schema.not;
 };
 
@@ -20199,7 +20210,7 @@ Handlebars.registerHelper('main', function (schema, options) {
     }
 });
 
-var simpleSchema = function simpleSchema(schema) {
+var simpleSchema = function (schema) {
     var result = schema.description === undefined && schema.title === undefined && schema.id === undefined;
     result &= schema.properties === undefined;
     return result;
@@ -20211,10 +20222,13 @@ Handlebars.registerHelper('simple', function (schema, options) {
     }
 });
 
-var withType = function withType(schema, options, hideAny) {
+var withType = function (schema, options, hideAny) {
     schema.__type = schema.type;
     if (!schema.type && !hideAny) {
         schema.__type = "any";
+    }
+    if (schema.const) {
+        schema.__type = schema.const;
     }
     if (schema.format) {
         schema.__type = schema.format;
@@ -20245,7 +20259,7 @@ Handlebars.registerHelper('obj', function (schema, options) {
     }
 });
 
-var pushBox = function pushBox(schema) {
+var pushBox = function (schema) {
     boxes[boxes.length - 1].push(schema);
 };
 
@@ -20270,7 +20284,7 @@ Handlebars.registerHelper('boxes', function (options) {
     return result;
 });
 
-var resolveIdRef = function resolveIdRef(ref) {
+var resolveIdRef = function (ref) {
     if (stack) {
         var i;
         for (i = stack.length - 1; i >= 0; i--) {
@@ -20282,7 +20296,7 @@ var resolveIdRef = function resolveIdRef(ref) {
     return null;
 };
 
-var resolvePointerRef = function resolvePointerRef(ref) {
+var resolvePointerRef = function (ref) {
     var root = stack[1];
     if (ref == "#") {
         return root;
@@ -20295,7 +20309,7 @@ var resolvePointerRef = function resolvePointerRef(ref) {
     }
 };
 
-var resolveRef = function resolveRef(ref) {
+var resolveRef = function (ref) {
     if (ref.indexOf("#") == 0) {
         return resolvePointerRef(ref);
     } else {
@@ -20303,7 +20317,7 @@ var resolveRef = function resolveRef(ref) {
     }
 };
 
-var getName = function getName(schema) {
+var getName = function (schema) {
     if (!schema) {
         return "<error>";
     }
@@ -20320,7 +20334,7 @@ Handlebars.registerHelper('name', function (schema, options) {
     }
 });
 
-var refName = function refName(ref) {
+var refName = function (ref) {
     var name = getName(resolveRef(ref));
     if (!name) {
         if (ref == "#") {
@@ -20398,16 +20412,14 @@ function init() {
 
 docson.doc = function (element, schema, ref, baseUrl) {
     var resolve_d;
-    var d = new Promise(function (resolve) {
+    var d = new Promise(resolve => {
         debug('Promise B');
         resolve_d = resolve;
     });
     if (baseUrl === undefined) baseUrl = '';
     init();
     var renderBox;
-    var throttled_render = _lodash2.default.throttle(function () {
-        return renderBox();
-    }, 1000);
+    var throttled_render = _lodash2.default.throttle(() => renderBox(), 1000);
     ready.then(function () {
         if (typeof element == "string") {
             element = (0, _jquery2.default)("#" + element);
@@ -20417,8 +20429,8 @@ docson.doc = function (element, schema, ref, baseUrl) {
         }
 
         var refs = {};
-        var get_ref = function get_ref(uri) {
-            return new Promise(function (resolve) {
+        var get_ref = function (uri) {
+            return new Promise(resolve => {
                 get_document(uri.clone().hash('').toString()).then(function (schema) {
                     refs[uri.toString()] = uri.hash() ? _jsonpointer2.default.get(schema, uri.hash()) : schema;
                 }).then(function () {
@@ -20428,7 +20440,7 @@ docson.doc = function (element, schema, ref, baseUrl) {
             });
         };
 
-        renderBox = function renderBox() {
+        renderBox = function () {
             debug('render');
             stack.push(refs);
             var target = schema;
@@ -20524,10 +20536,10 @@ docson.doc = function (element, schema, ref, baseUrl) {
             });
         };
 
-        var resolveSchemaRef = function resolveSchemaRef(parentObject, item, baseUrl) {
+        var resolveSchemaRef = function (parentObject, item, baseUrl) {
             debug('resolveSchemaRef', parentObject, item, baseUrl);
 
-            return new Promise(function (resolve, reject) {
+            return new Promise((resolve, reject) => {
                 // not a $ref? we're done
                 if (parentObject.key !== "$ref") return resolve();
 
@@ -20556,20 +20568,20 @@ docson.doc = function (element, schema, ref, baseUrl) {
                 parentObject.update(uri.toString());
 
                 debug(get_ref(uri));
-                get_ref(uri).finally(function () {
+                get_ref(uri).finally(() => {
                     throttled_render();
                     resolve();
                 });
             });
         };
 
-        resolveRefsReentrant = function resolveRefsReentrant(schema, relPath) {
+        resolveRefsReentrant = function (schema, relPath) {
             debug('resolveRefsReentrant');
             if (relPath === undefined) {
                 relPath = new _urijs2.default(baseUrl);
             }
 
-            var p = [];
+            let p = [];
 
             (0, _traverse2.default)(schema).forEach(function (item) {
                 // Fix Swagger weird generation for array.
@@ -20584,9 +20596,7 @@ docson.doc = function (element, schema, ref, baseUrl) {
             return Promise.all(p).finally();
         };
 
-        resolveRefsReentrant(schema).finally(throttled_render).then(resolve_d).catch(function (e) {
-            return console.log('oops', e);
-        });
+        resolveRefsReentrant(schema).finally(throttled_render).then(resolve_d).catch(e => console.log('oops', e));
     });
     return d.finally(throttled_render);
 };

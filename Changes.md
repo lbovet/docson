@@ -1,5 +1,10 @@
 # Revision history for docson 
 
+## NEXT
+
+* Display examples as part of the description, if present. [GH#60, jvican]
+* Add support for consts. [jvican]
+
 ## v2.0.1 - 2018-07-23
 
 * Release to npm.
