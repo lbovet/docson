@@ -9086,7 +9086,14 @@ var scripts = document.getElementsByTagName('script');
 var script = scripts[scripts.length - 1];
 
 if (script.attributes["data-schema"]) {
-    var receiveMessage = function receiveMessage(event) {
+    var docson;
+    if (script.attributes["data-docson"]) {
+        docson = script.attributes["data-docson"].value;
+    } else {
+        docson = script.src.replace("js/widget.js", "index.html");
+    }
+    document.write("<iframe class='docson-widget' id='" + script.attributes["data-schema"].value + "' style='padding: 0; border: 0; width:100%; background: transparent' src='" + docson + "#" + script.attributes["data-schema"].value + "'></iframe>");
+    function receiveMessage(event) {
         if (event.data.id && event.data.id == "docson") {
             var frame = document.getElementById(event.data.url);
             if (event.data.action == "resized") {
@@ -9097,16 +9104,7 @@ if (script.attributes["data-schema"]) {
                 frame.contentWindow.postMessage({ id: "docson", font: window.getComputedStyle(frame.parentNode).fontFamily }, "*");
             }
         }
-    };
-
-    var docson;
-    if (script.attributes["data-docson"]) {
-        docson = script.attributes["data-docson"].value;
-    } else {
-        docson = script.src.replace("js/widget.js", "index.html");
     }
-    document.write("<iframe class='docson-widget' id='" + script.attributes["data-schema"].value + "' style='padding: 0; border: 0; width:100%; background: transparent' src='" + docson + "#" + script.attributes["data-schema"].value + "'></iframe>");
-
     window.addEventListener("message", receiveMessage, false);
 } else {
     alert("<p style='color:red'>Missing data-schema (url to schema)</p>");
