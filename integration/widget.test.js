@@ -13,7 +13,7 @@ const server = new Promise( resolve => {
     server = app.listen( 3000, () => resolve(server) );
 }).catch( e => console.log(e) );
 
-const browser = puppeteer.launch({ headless: true });
+const browser = puppeteer.launch({ headless: false });
 
 beforeAll( async () => { await server; await browser }, 10000 );
 afterAll( async () => { 

@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 
-jest.setTimeout(500000);
+jest.setTimeout(50000);
 
 const server = new Promise( resolve => {
     let app = require( '../src/server' )({ directory: path.join( __dirname, '..' ) });
@@ -9,7 +9,7 @@ const server = new Promise( resolve => {
     server = app.listen( 3000, () => resolve(server) );
 }).catch( e => console.log(e) );
 
-const browser = puppeteer.launch({ headless: true });
+const browser = puppeteer.launch({ headless: false });
 
 const rootUrl = "http://localhost:3000/public/index.html";
 
