@@ -93,9 +93,23 @@ const highlight = false;
 
     Handlebars.registerHelper('desc', function(schema) {
         var description = schema.description;
+        var examples = schema.examples;
 
-        if( !description ) return "";
-        var text = description;
+        var text = "";
+
+        if( !description && !examples ) {
+            return "";
+        }
+
+        if ( description ) {
+            text = description
+        }
+
+        if ( examples && examples.length > 0 ) {
+            examples = [ " Examples: \n" ].concat(examples).join("\n\t");
+            text = text + examples;
+        }
+
         if(marked) {
             marked.setOptions({gfm: true, breaks: true})
             return new Handlebars.SafeString(marked(text));
