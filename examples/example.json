@@ -12,10 +12,12 @@
             "properties": {
                 "id": {
                     "description": "The unique identifier for a product",
-                    "type": "number"
+                    "type": "number",
+                    "examples": [ 1234, 5678 ]
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "examples": [ "thingy" ]
                 },
                 "price": {
                     "type": "number",
