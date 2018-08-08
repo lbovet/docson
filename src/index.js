@@ -33,7 +33,6 @@ const highlight = false;
 
     var resolve_ready;
     var ready = new Promise( (resolve,reject) => {
-        debug( 'promise A' );
         resolve_ready = resolve;
     });
 
