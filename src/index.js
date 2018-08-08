@@ -135,7 +135,7 @@ const highlight = false;
     });
 
     Handlebars.registerHelper('primitive', function(schema, options) {
-        if(schema.type && schema.type != "object" && schema.type != "array" || schema.enum) {
+        if(schema.type && schema.type != "object" && schema.type != "array" || schema.enum || schema.const) {
             return withType(this, options, true)
         }
     });
@@ -199,6 +199,9 @@ const highlight = false;
         schema.__type = schema.type;
         if(!schema.type && !hideAny) {
             schema.__type="any";
+        }
+        if (schema.const) {
+            schema.__type=schema.const;
         }
         if(schema.format) {
             schema.__type=schema.format;
