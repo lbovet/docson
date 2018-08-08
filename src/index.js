@@ -106,8 +106,10 @@ const highlight = false;
         }
 
         if ( examples && examples.length > 0 ) {
-            examples = [ " Examples: \n" ].concat(examples).join("\n\t");
-            text = text + examples;
+            text += "\n\n*Examples* \n";
+            examples.forEach( e => {
+                text += "\n\n```\n" + e + "\n```\n\n";
+            });
         }
 
         if(marked) {
