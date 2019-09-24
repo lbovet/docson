@@ -13,6 +13,22 @@ const browser = puppeteer.launch({ headless: false });
 
 const rootUrl = "http://localhost:3000/public/index.html";
 
+// Returns a promise that rejects and fails the test when the page produces an
+// error message on the console, and never resolves (so don't await it but
+// combine it using Promise.race() - if you don't, the test will still fail, but
+// you'll get an UnhandledPromiseRejectionWarning from node).
+function failOnErrorMessage(page) {
+    return new Promise((resolve, reject) => {
+        page.on('console', msg => {
+            if ((msg.type() === "error" && !msg.location().url.includes('favicon.ico')) || msg.text().startsWith('oops')) {
+                Promise.all(msg.args().map(h => h.evaluate(a => a.toString())))
+                    .then(args => expect({"console message": args}).toBeUndefined())
+                    .catch(e => reject(e));
+            }
+        });
+    });
+}
+
 beforeAll( async () => { await server }, 50000 );
 afterAll( async () => { 
     ( await server ).close();
@@ -102,4 +118,24 @@ test('pretty big schema', async () => {
         page.evaluate( () => Array.from(document.querySelectorAll('p').values()).map( s => s.innerText ) );
 
     expect(results).toContain( 'All documents and attachments related to the contract, including any notices.' );
+});
+
+test('additionalProperties', async () => {
+    const page = await ( await browser ).newPage();
+    let errorOccurred = failOnErrorMessage(page);
+
+    await page.goto( rootUrl + "#/integration/schemas/additionalProperties.json");
+    
+    async function textAtPath(path) {
+        let element = await page.waitFor(path);
+        return await element.evaluate(e => e.textContent.trim());
+    }
+    await Promise.race([
+        Promise.all([
+            expect(textAtPath('#doc .box .signature:nth-child(2) .property-name')).resolves.toBe('foo'),
+            expect(textAtPath('#doc .box .signature:nth-child(3) .property-name')).resolves.toBe('bar'),
+            expect(textAtPath('#doc .box .signature:nth-child(4) .box .signature-type')).resolves.toBe('boolean')
+        ]),
+        errorOccurred
+    ]);
 });
