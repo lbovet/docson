@@ -31,7 +31,7 @@ test( 'basic', async () => {
 
     let frames = await page.frames();
 
-    await page.waitFor(2000);
+    await frames[1].waitFor('.title');
 
     let title = await frames[1].evaluate( 
         () => document.querySelector('.title').innerText 
