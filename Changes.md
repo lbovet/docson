@@ -1,5 +1,9 @@
 # Revision history for docson 
 
+## $NEXT
+
+* Fix build not to require pnpx [GH#76, cwalther]
+
 ## v2.1.0 - 2018-08-08
 
 * Display examples as part of the description, if present. [GH#60, jvican]
