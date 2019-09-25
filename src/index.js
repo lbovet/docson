@@ -404,13 +404,13 @@ const highlight = false;
 
             var refs = {};
             var get_ref = function(uri) {
-                return new Promise( resolve => {
+                return new Promise( (resolve, reject) => {
                     get_document( uri.clone().hash('').toString() ).then(function(schema){
                     refs[uri.toString()] = uri.hash() ? jsonpointer.get( schema, uri.hash() ) : schema;
                 }).then(function(){ 
                     debug('get_ref');
                     resolve();
-                });
+                }, reject);
                 });
             };
 
