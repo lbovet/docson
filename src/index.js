@@ -543,11 +543,15 @@ const highlight = false;
                     // use the normalized uri
                     parentObject.update( uri.toString() );
 
-                    debug(get_ref(uri));
-                    get_ref( uri ).finally( () => {
+                    var refp = get_ref(uri);
+                    debug(refp);
+                    refp.finally( () => {
                         throttled_render();
                         resolve();
-                    });
+                    })
+                    // avoid "unhandled rejection" error - the output may be redundant as the
+                    // browser probably already logged the failure, but better be explicit
+                    .catch(e => { console.warn("Unable to resolve $ref " + uri.toString() + ":", e); });
                 });
             }
 
