@@ -53,7 +53,7 @@ const highlight = false;
                     try {
                         content = JSON.parse(content);
                     } catch(e) {
-                        console.error("Unable to parse "+segments[0], e);
+                        console.error("Unable to parse "+url, e, content);
                         content = {};
                     }
                 }
