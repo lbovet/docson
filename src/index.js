@@ -572,6 +572,7 @@ const highlight = false;
                 return Promise.all(p).finally();
             };
             
+            schemaDocuments[baseUrl] = Promise.resolve(schema);
             resolveRefsReentrant(schema).finally( throttled_render ).then( resolve_d ).catch( e => console.log('oops', e )  );
         })
         return d.finally( throttled_render );
