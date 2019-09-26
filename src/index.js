@@ -540,8 +540,10 @@ const highlight = false;
 
                     uri.normalize();
 
-                    // use the normalized uri
-                    parentObject.update( uri.toString() );
+                    // use the normalized uri, unless it's empty (which happens when item == "#" and baseUrl is empty)
+                    if (uri.toString()) {
+                        parentObject.update( uri.toString() );
+                    }
 
                     debug(get_ref(uri));
                     get_ref( uri ).finally( () => {
