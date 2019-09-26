@@ -70,7 +70,7 @@ test('recursive schemas', async () => {
 
     await page.goto( rootUrl + "#/integration/schemas/recursive/circle.json");
 
-    await page.waitFor('#doc .box .box .box .desc');
+    await page.waitFor('#doc .box .box .desc');
 
     await expect( 
         page.evaluate( () => Array.from(document.querySelectorAll('.desc').values()).map( s => s.innerText ) )
