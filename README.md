@@ -15,6 +15,7 @@ Give Docson a JSON schema and it will generate a [beautiful documentation](http:
 ## Installation
 
 * Place the Docson distribution on the web server serving the schemas (to avoid cross-origin issues).
+* If you want to use Docson without a web server, you may be interested in the [Offline Usage Tutorial](https://gist.github.com/riegl-aw/6b258499887fc3e302f0b5dbcfa7b3d9).
 
 ## Usage
 
