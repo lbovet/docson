@@ -40,7 +40,7 @@ test('resolve #definitions in non-root schema', async () => {
 
     await page.goto( rootUrl + "#/integration/schemas/def-non-root/User.json");
 
-    await page.waitFor(5000);
+    await page.waitFor('#doc .box .box .box .signature:nth-child(6) .property-name');
     
     await expect( 
         page.evaluate( () => Array.from(document.querySelectorAll('.property-name').values()).map( s => s.innerText ) )
@@ -55,7 +55,7 @@ test('local schema, absolute path', async () =>  {
 
     await page.goto( rootUrl + "#/integration/schemas/local-absolute/main.json");
 
-    await page.waitFor(5000);
+    await page.waitFor('#doc .box .box .desc');
     
     await expect( 
         page.evaluate( () => Array.from(document.querySelectorAll('.desc').values()).map( s => s.innerText ) )
@@ -70,7 +70,7 @@ test('recursive schemas', async () => {
 
     await page.goto( rootUrl + "#/integration/schemas/recursive/circle.json");
 
-    await page.waitFor(5000);
+    await page.waitFor('#doc .box .box .desc');
 
     await expect( 
         page.evaluate( () => Array.from(document.querySelectorAll('.desc').values()).map( s => s.innerText ) )
@@ -84,7 +84,7 @@ test('recursive schemas, part II', async () => {
     const page = await ( await browser ).newPage();
 
     await page.goto( rootUrl + "#/integration/schemas/recursive/within_schema.json");
-    await page.waitFor(5000);
+    await page.waitFor('#doc .box .desc p');
 
     let results = await
         page.evaluate( () => Array.from(document.querySelectorAll('p').values()).map( s => s.innerText ) );

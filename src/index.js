@@ -53,7 +53,7 @@ const highlight = false;
                     try {
                         content = JSON.parse(content);
                     } catch(e) {
-                        console.error("Unable to parse "+segments[0], e);
+                        console.error("Unable to parse "+url, e, content);
                         content = {};
                     }
                 }
@@ -540,8 +540,10 @@ const highlight = false;
 
                     uri.normalize();
 
-                    // use the normalized uri
-                    parentObject.update( uri.toString() );
+                    // use the normalized uri, unless it's empty (which happens when item == "#" and baseUrl is empty)
+                    if (uri.toString()) {
+                        parentObject.update( uri.toString() );
+                    }
 
                     debug(get_ref(uri));
                     get_ref( uri ).finally( () => {
@@ -572,6 +574,7 @@ const highlight = false;
                 return Promise.all(p).finally();
             };
             
+            schemaDocuments[baseUrl] = Promise.resolve(schema);
             resolveRefsReentrant(schema).finally( throttled_render ).then( resolve_d ).catch( e => console.log('oops', e )  );
         })
         return d.finally( throttled_render );
