@@ -3,14 +3,14 @@ const express    = require('express');
 
 const puppeteer = require('puppeteer')
 
-const rootUrl = "http://localhost:3000/";
+const rootUrl = "http://localhost:3001/";
 
 jest.setTimeout(500000);
 
 const server = new Promise( resolve => {
     let app = require( '../src/server' )({ directory: path.join( __dirname, '..' ) });
     let server;
-    server = app.listen( 3000, () => resolve(server) );
+    server = app.listen( 3001, () => resolve(server) );
 }).catch( e => console.log(e) );
 
 const browser = puppeteer.launch({ headless: false });
