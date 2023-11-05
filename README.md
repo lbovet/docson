@@ -120,6 +120,3 @@ Not implemented:
 * [All tests](http://lbovet.github.io/docson/tests/test.html)
 
 Please pull-request your failing schemas in the `tests/` folder and open an issue describing the expected result.
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/lbovet/docson/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
